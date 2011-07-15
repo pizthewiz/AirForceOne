@@ -8,5 +8,9 @@
 
 #import <Quartz/Quartz.h>
 
-@interface AirForceOnePlugIn : QCPlugIn {}
+@interface AirForceOnePlugIn : QCPlugIn {
+@private
+    NSURL* _imageURL;
+}
+@property (nonatomic, assign) NSString* inputImageLocation;
 @end
