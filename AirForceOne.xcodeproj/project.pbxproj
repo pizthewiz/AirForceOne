@@ -31,6 +31,7 @@
 		D8DC610D13D0C4E600FB68EF /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = SOURCE_ROOT; };
 		D8DC610F13D0C6F500FB68EF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D8DC611113D0C71E00FB68EF /* AirForceOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirForceOne.h; sourceTree = "<group>"; };
+		D8DC611213D0FADA00FB68EF /* Display On Apple TV.qtz */ = {isa = PBXFileReference; lastKnownFileType = "video.quartz-composer"; path = "Display On Apple TV.qtz"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +94,7 @@
 				D8DC610B13D0C4E600FB68EF /* Rakefile */,
 				D8DC610D13D0C4E600FB68EF /* TODO */,
 				D8DC610A13D0C4E600FB68EF /* CHANGELOG */,
+				D8DC611213D0FADA00FB68EF /* Display On Apple TV.qtz */,
 			);
 			path = AirForceOne;
 			sourceTree = "<group>";

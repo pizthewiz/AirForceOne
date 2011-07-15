@@ -9,7 +9,7 @@ BUNDLE_VERSION_STRING_KEY = 'CFBundleShortVersionString'
 HEAD_REVISION_KEY = 'com.chordedconstructions.ProjectHEADRevision'
 
 ARCHIVE_NAME = 'AriForceOne'
-ARCHIVE_INCLUDE_FILES = %w(README.markdown TODO CHANGELOG)
+ARCHIVE_INCLUDE_FILES = %w(README.markdown TODO CHANGELOG Display\ On\ Apple\ TV.qtz)
 ARCHIVE_EXCLUDE_FILES = %w()
 
 # helpers
