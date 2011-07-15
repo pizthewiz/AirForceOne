@@ -9,7 +9,7 @@
 #import "AirForceOnePlugIn.h"
 #import "AirForceOne.h"
 
-static NSString* const AFOExampleCompositionName = @"Audio Player";
+static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @interface AirForceOnePlugIn()
 @property (nonatomic, retain) NSURL* imageURL;
@@ -95,9 +95,35 @@ static NSString* const AFOExampleCompositionName = @"Audio Player";
 	CGLContextObj cgl_ctx = [context CGLContextObj];
 	*/
 
+    // quick bail
+    if (![self didValueForInputKeyChange:@"inputImageLocation"])
+        return YES;
+
     CCDebugLogSelector();
 
-	return YES;
+    NSURL* url = [NSURL URLWithString:self.inputImageLocation];
+    if (![url isFileURL]) {
+        NSString* path = [self.inputImageLocation stringByStandardizingPath];
+        if ([path isAbsolutePath]) {
+            url = [NSURL fileURLWithPath:path isDirectory:NO];
+        } else {
+            NSURL* baseDirectoryURL = [[context compositionURL] URLByDeletingLastPathComponent];
+            url = [baseDirectoryURL URLByAppendingPathComponent:path];
+        }
+    }
+
+    self.imageURL = url;
+
+    // TODO - may be better to just let it fail later?
+    if (![url checkResourceIsReachableAndReturnError:NULL]) {
+        return YES;
+    }
+
+    // TODO - some sort of file validation?
+
+    CCDebugLog(@"should display image at location: %@", self.imageURL);
+
+    return YES;
 }
 
 - (void)disableExecution:(id <QCPlugInContext>)context {
