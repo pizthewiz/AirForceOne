@@ -11,6 +11,7 @@
 		D8DC60F313D0B87C00FB68EF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DC60F213D0B87C00FB68EF /* Quartz.framework */; };
 		D8DC60FF13D0B87C00FB68EF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DC60FD13D0B87C00FB68EF /* InfoPlist.strings */; };
 		D8DC610213D0B87C00FB68EF /* AirForceOnePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */; };
+		D8DC611013D0C6F500FB68EF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DC610E13D0C6F500FB68EF /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,13 +19,18 @@
 		D8DC60F013D0B87C00FB68EF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D8DC60F213D0B87C00FB68EF /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		D8DC60F513D0B87C00FB68EF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		D8DC60F613D0B87C00FB68EF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		D8DC60F713D0B87C00FB68EF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8DC60FC13D0B87C00FB68EF /* AirForceOne-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AirForceOne-Info.plist"; sourceTree = "<group>"; };
 		D8DC60FE13D0B87C00FB68EF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D8DC610013D0B87C00FB68EF /* AirForceOnePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AirForceOnePlugin.h; sourceTree = "<group>"; };
 		D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirForceOnePlugin.m; sourceTree = "<group>"; };
 		D8DC610313D0B87C00FB68EF /* AirForceOne-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AirForceOne-Prefix.pch"; sourceTree = "<group>"; };
+		D8DC610A13D0C4E600FB68EF /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = SOURCE_ROOT; };
+		D8DC610B13D0C4E600FB68EF /* Rakefile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Rakefile; sourceTree = SOURCE_ROOT; };
+		D8DC610C13D0C4E600FB68EF /* README.markdown */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.markdown; sourceTree = SOURCE_ROOT; };
+		D8DC610D13D0C4E600FB68EF /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = SOURCE_ROOT; };
+		D8DC610F13D0C6F500FB68EF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D8DC611113D0C71E00FB68EF /* AirForceOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirForceOne.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +77,6 @@
 			isa = PBXGroup;
 			children = (
 				D8DC60F513D0B87C00FB68EF /* AppKit.framework */,
-				D8DC60F613D0B87C00FB68EF /* CoreData.framework */,
 				D8DC60F713D0B87C00FB68EF /* Foundation.framework */,
 			);
 			name = "Other Frameworks";
@@ -80,9 +85,14 @@
 		D8DC60FA13D0B87C00FB68EF /* AirForceOne */ = {
 			isa = PBXGroup;
 			children = (
+				D8DC611113D0C71E00FB68EF /* AirForceOne.h */,
 				D8DC610013D0B87C00FB68EF /* AirForceOnePlugin.h */,
 				D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */,
 				D8DC60FB13D0B87C00FB68EF /* Supporting Files */,
+				D8DC610C13D0C4E600FB68EF /* README.markdown */,
+				D8DC610B13D0C4E600FB68EF /* Rakefile */,
+				D8DC610D13D0C4E600FB68EF /* TODO */,
+				D8DC610A13D0C4E600FB68EF /* CHANGELOG */,
 			);
 			path = AirForceOne;
 			sourceTree = "<group>";
@@ -93,6 +103,7 @@
 				D8DC60FC13D0B87C00FB68EF /* AirForceOne-Info.plist */,
 				D8DC60FD13D0B87C00FB68EF /* InfoPlist.strings */,
 				D8DC610313D0B87C00FB68EF /* AirForceOne-Prefix.pch */,
+				D8DC610E13D0C6F500FB68EF /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -107,7 +118,8 @@
 				D8DC60E813D0B87C00FB68EF /* Sources */,
 				D8DC60E913D0B87C00FB68EF /* Frameworks */,
 				D8DC60EA13D0B87C00FB68EF /* Resources */,
-				D8DC60EB13D0B87C00FB68EF /* ShellScript */,
+				D8DC610913D0C45300FB68EF /* Update Info.plist With git Info */,
+				D8DC60EB13D0B87C00FB68EF /* Copy Plug-In Into Place */,
 			);
 			buildRules = (
 			);
@@ -146,24 +158,40 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8DC60FF13D0B87C00FB68EF /* InfoPlist.strings in Resources */,
+				D8DC611013D0C6F500FB68EF /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D8DC60EB13D0B87C00FB68EF /* ShellScript */ = {
+		D8DC60EB13D0B87C00FB68EF /* Copy Plug-In Into Place */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Copy Plug-In Into Place";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This shell script simply copies the built plug-in to \"~/Library/Graphics/Quartz Composer Plug-Ins\" and overrides any previous version at that location\n\nmkdir -p \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins\"\nrm -rf \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins/AirForceOne.plugin\"\ncp -rf \"$BUILT_PRODUCTS_DIR/AirForceOne.plugin\" \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins/\"\n";
+			shellScript = "# This shell script simply copies the built plug-in to \"~/Library/Graphics/Quartz Composer Plug-Ins\" and overrides any previous version at that location\n\nmkdir -p \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins\"\nrm -rf \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins/AirForceOne.plugin\"\nditto \"$BUILT_PRODUCTS_DIR/AirForceOne.plugin\" \"$USER_LIBRARY_DIR/Graphics/Quartz Composer Plug-Ins/AirForceOne.plugin\"\n";
+		};
+		D8DC610913D0C45300FB68EF /* Update Info.plist With git Info */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Update Info.plist With git Info";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/bin/rake update_bundle_version\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -187,6 +215,14 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		D8DC610E13D0C6F500FB68EF /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8DC610F13D0C6F500FB68EF /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -194,17 +230,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+					DEBUG,
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -212,7 +249,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
+				WARNING_CFLAGS = "-Wall";
 			};
 			name = Debug;
 		};
@@ -220,25 +259,27 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
+				WARNING_CFLAGS = "-Wall";
 			};
 			name = Release;
 		};
 		D8DC610713D0B87C00FB68EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_OBJC_GC = supported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AirForceOne/AirForceOne-Prefix.pch";
 				INFOPLIST_FILE = "AirForceOne/AirForceOne-Info.plist";
@@ -251,7 +292,6 @@
 		D8DC610813D0B87C00FB68EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_ENABLE_OBJC_GC = supported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AirForceOne/AirForceOne-Prefix.pch";
 				INFOPLIST_FILE = "AirForceOne/AirForceOne-Info.plist";
