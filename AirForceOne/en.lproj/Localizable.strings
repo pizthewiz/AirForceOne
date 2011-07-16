@@ -7,4 +7,4 @@
 */
 
 "kQCPlugIn_Name" = "Apple TV";
-"kQCPlugIn_Description" = "This patch allows an on-disk image to be displayed on an Apple TV through the application AirFlick.\n\nThe Apple TV supports the JPEG, GIF and TIFF image formats.";
+"kQCPlugIn_Description" = "This patch allows an on-disk image to be displayed on a 2nd generation Apple TV through the application AirFlick.\n\nThe Apple TV supports the JPEG, GIF and TIFF image formats.";
