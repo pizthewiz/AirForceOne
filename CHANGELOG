@@ -1,3 +1,6 @@
 
+v0.1.1 (15 July 2011)
+* support local and remote image urls and relative file paths
+
 v0.1.0 (15 July 2011)
 * initial release
