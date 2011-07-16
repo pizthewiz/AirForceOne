@@ -2,9 +2,9 @@
   Localizable.strings
   AirForceOne
 
-  Created by Jean-Pierre Mouilleseaux on 7/15/11.
-  Copyright 2011 __MyCompanyName__. All rights reserved.
+  Created by Jean-Pierre Mouilleseaux on 15 July 2011.
+  Copyright 2011 Chorded Constructions. All rights reserved.
 */
 
-"kQCPlugIn_Name" = "AirForceOne";
-"kQCPlugIn_Description" = "AirForceOne DESCRIPTION";
+"kQCPlugIn_Name" = "Apple TV";
+"kQCPlugIn_Description" = "This patch allows an on-disk image to be displayed on an Apple TV through the application AirFlick.\n\nThe Apple TV supports the JPEG, GIF and TIFF image formats.";
