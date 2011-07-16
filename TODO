@@ -1,7 +1,12 @@
 NOW
-[ ] add input Image Location
-[ ] AirFlick notification on Image Location change
+[X] add input Image Location
+[X] AirFlick notification on Image Location change
+[ ] allow Image Location to be a remote URL as well (take from SpectreSupreme)
 
 LATER
-[ ] reverse engineer HTTP protocol and do it directly
-[ ] add input Image and manage details internally
+[ ] shortcut AirFlick entirely and use HTTP info directly:
+    https://github.com/norio-nomura/SendToAirFlick
+[ ] Apple TV name and password inputs or settings
+[ ] add Image input and manage details internally
+[ ] prepopulate Apple TV options via zero-conf:
+    _appletv-v2._tcp. or _airplay._tcp.
