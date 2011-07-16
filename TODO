@@ -1,7 +1,7 @@
 NOW
 [X] add input Image Location
 [X] AirFlick notification on Image Location change
-[ ] allow Image Location to be a remote URL as well (take from SpectreSupreme)
+[X] allow Image Location to be a remote URL as well (take from SpectreSupreme)
 
 LATER
 [ ] shortcut AirFlick entirely and use HTTP info directly:

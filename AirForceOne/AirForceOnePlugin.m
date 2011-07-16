@@ -123,22 +123,20 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
     CCDebugLogSelector();
 
     NSURL* url = [NSURL URLWithString:self.inputImageLocation];
-    if (![url isFileURL]) {
-        NSString* path = [self.inputImageLocation stringByStandardizingPath];
-        if ([path isAbsolutePath]) {
-            url = [NSURL fileURLWithPath:path isDirectory:NO];
-        } else {
-            NSURL* baseDirectoryURL = [[context compositionURL] URLByDeletingLastPathComponent];
-            url = [baseDirectoryURL URLByAppendingPathComponent:path];
-        }
+    // scheme-less would suggest a relative file url
+    if (![url scheme]) {
+        NSURL* baseDirectoryURL = [[context compositionURL] URLByDeletingLastPathComponent];
+//        NSString* cleanFilePath = [[[baseDirectoryURL path] stringByAppendingPathComponent:self.inputImageLocation] stringByStandardizingPath];
+//        CCDebugLog(@"cleaned file path: %@", cleanFilePath);
+        url = [baseDirectoryURL URLByAppendingPathComponent:self.inputImageLocation];
     }
 
     self.imageURL = url;
 
     // TODO - may be better to just let it fail later?
-    if (![url checkResourceIsReachableAndReturnError:NULL]) {
-        return YES;
-    }
+//    if (![url checkResourceIsReachableAndReturnError:NULL]) {
+//        return YES;
+//    }
 
     // TODO - some sort of file validation?
 
@@ -182,9 +180,9 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
     // via https://gist.github.com/755600
     NSDictionary* slideDescription = [NSDictionary dictionaryWithObjectsAndKeys:
         @"show-photo", @"RequestType",
-        [self.imageURL path], @"MediaLocation",
+        [self.imageURL absoluteString], @"MediaLocation",
 //        @"1", @"Rotation",
-        @"Dissolve", @"Transition",
+//        @"Dissolve", @"Transition",
         nil];
 
     CCDebugLog(@"sending: %@", slideDescription);
