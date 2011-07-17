@@ -6,10 +6,12 @@ a quartz composer patch to display an image on an 2nd generation Apple TV
 move AirForceOne.plugin into ~/Library/Graphics/Quartz Composer Plug-Ins/
 
 ### NOTES
-* [AirFlick](http://ericasadun.com/ftp/AirPlay/) must be running and the desired Apple TV selected
-* the Image Location input should be a fully qualified url with scheme, or a relative to the composition file path
+* the Image Location input should be a fully qualified url with scheme, or a file path relative to the composition
 * the image should be sensitive to the 1280x720 display resolution, larger images will take much longer to transmit, and may not display, while smaller images will be scaled up
 * the Apple TV supports the JPEG, GIF and TIFF image formats
+* Apple TV's requiring password to access are not yet supported
 
 ### THANKS
 - Erica Sandun for her AirPlay utility [AirFlick](http://ericasadun.com/ftp/AirPlay/) and [programatic means to use it](https://gist.github.com/755600)
+- Norio Nomura for the infinitely helpful [SendToAirFlick](https://github.com/norio-nomura/SendToAirFlick)
+- Pascal Widdershoven for [Airplayer](https://github.com/PascalW/Airplayer) which gives a great breakdown of AirPlay functions
