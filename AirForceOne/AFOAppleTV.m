@@ -73,7 +73,7 @@
     [connection description];
 }
 
-- (void)stopVideo {
+- (void)stop {
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/stop", self.host]];
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setHTTPMethod:@"POST"];

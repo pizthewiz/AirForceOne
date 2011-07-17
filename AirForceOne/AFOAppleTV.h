@@ -17,5 +17,5 @@
 
 - (void)showImageAtURL:(NSURL*)imageURL;
 - (void)playVideoAtURL:(NSURL*)videoURL;
-- (void)stopVideo;
+- (void)stop;
 @end
