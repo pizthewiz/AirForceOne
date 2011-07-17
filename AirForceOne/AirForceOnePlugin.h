@@ -8,8 +8,11 @@
 
 #import <Quartz/Quartz.h>
 
+@class AFOAppleTV;
+
 @interface AirForceOnePlugIn : QCPlugIn {
 @private
+    AFOAppleTV* _appleTV;
     NSURL* _imageURL;
 }
 @property (nonatomic, assign) NSString* inputImageLocation;

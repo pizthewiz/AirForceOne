@@ -8,6 +8,7 @@
 
 #import "AirForceOnePlugIn.h"
 #import "AirForceOne.h"
+#import "AFOAppleTV.h"
 
 @implementation NSWorkspace(CCAdditions)
 
@@ -81,6 +82,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 #pragma mark -
 
 - (void)dealloc {
+    [_appleTV release];
     [_imageURL release];
 
 	[super dealloc];
@@ -165,55 +167,20 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
     CCDebugLogSelector();
 }
 
-#pragma mark - CONNECTION DELEGATE
-
-- (void)connection:(NSURLConnection*)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
-    CCDebugLogSelector();    
-}
-
-- (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response {
-    CCDebugLogSelector();
-
-    CCDebugLog(@"response status: %lu", (long unsigned)[(NSHTTPURLResponse*)response statusCode]);
-}
-
-- (void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
-    CCDebugLogSelector();
-}
-
-- (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error {
-    CCDebugLogSelector();
-
-    [connection release];
-    CCErrorLog(@"ERROR - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection*)connection {
-    CCDebugLogSelector();
-
-    [connection release];
-}
-
 #pragma mark - PRIVATE
 
 - (void)_sendToAppleTV {
     CCDebugLogSelector();
 
+    if (!_appleTV) {
 #define AFOAppleTVHost @"http://10.0.1.22"
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/play", AFOAppleTVHost]];
-    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
-    [request setHTTPMethod:@"POST"];
+        _appleTV = [[AFOAppleTV alloc] initWithHost:AFOAppleTVHost];
+    }
+
 #define AFOContentLocation @"http://www.808.dk/pics/video/gizmo.mp4"
-    NSString* bodyString = [NSString stringWithFormat:@"Content-Location: %@\nStart-Position: 0.0000\n", AFOContentLocation];
-    NSData* bodyData = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setValue:[NSString stringWithFormat:@"%d", [bodyData length]] forHTTPHeaderField:@"Content-length"];
-    [request setHTTPBody:bodyData];
-
-    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    [request release];
-
-    // NB - the connection is released in the failed/finished delegate methods
-    [connection description];
+    NSURL* contentURL = [[NSURL alloc] initWithString:AFOContentLocation];
+    [_appleTV playVideoAtURL:contentURL];
+    [contentURL release];
 }
 
 - (void)_sendImageToAirFlick {
