@@ -33,6 +33,7 @@
 static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @interface AirForceOnePlugIn()
+@property (nonatomic, retain) NSString* host;
 @property (nonatomic, retain) NSURL* imageURL;
 - (void)_sendToAppleTV;
 - (void)_sendImageToAirFlick;
@@ -40,8 +41,8 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @implementation AirForceOnePlugIn
 
-@dynamic inputImageLocation;
-@synthesize imageURL = _imageURL;
+@dynamic inputHost, inputImageLocation;
+@synthesize host = _host, imageURL = _imageURL;
 
 + (NSDictionary*)attributes {
     NSMutableDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys: 
@@ -66,7 +67,9 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 }
 
 + (NSDictionary*)attributesForPropertyPortWithKey:(NSString*)key {
-    if ([key isEqualToString:@"inputImageLocation"])
+    if ([key isEqualToString:@"inputHost"])
+        return [NSDictionary dictionaryWithObjectsAndKeys:@"Host", QCPortAttributeNameKey, nil];
+    else if ([key isEqualToString:@"inputImageLocation"])
         return [NSDictionary dictionaryWithObjectsAndKeys:@"Image Location", QCPortAttributeNameKey, nil];
 	return nil;
 }
@@ -83,6 +86,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 - (void)dealloc {
     [_appleTV release];
+    [_host release];
     [_imageURL release];
 
 	[super dealloc];

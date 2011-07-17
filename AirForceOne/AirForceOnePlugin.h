@@ -13,7 +13,9 @@
 @interface AirForceOnePlugIn : QCPlugIn {
 @private
     AFOAppleTV* _appleTV;
+    NSString* _host;
     NSURL* _imageURL;
 }
+@property (nonatomic, assign) NSString* inputHost;
 @property (nonatomic, assign) NSString* inputImageLocation;
 @end
