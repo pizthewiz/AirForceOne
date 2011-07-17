@@ -16,5 +16,5 @@
 // @property (nonatomic, readonly) NSString* host;
 
 - (void)playVideoAtURL:(NSURL*)videoURL;
-- (void)stop;
+- (void)stopVideo;
 @end

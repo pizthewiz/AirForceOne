@@ -49,7 +49,16 @@
     [connection description];
 }
 
-- (void)stop {
+- (void)stopVideo {
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/stop", self.host]];
+    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+
+    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [request release];
+
+    // NB - the connection is released in the failed/finished delegate methods
+    [connection description];
 }
 
 #pragma mark - CONNECTION DELEGATE
