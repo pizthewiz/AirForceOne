@@ -7,17 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D8DC60F113D0B87C00FB68EF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DC60F013D0B87C00FB68EF /* Cocoa.framework */; };
 		D8DC60F313D0B87C00FB68EF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DC60F213D0B87C00FB68EF /* Quartz.framework */; };
 		D8DC60FF13D0B87C00FB68EF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DC60FD13D0B87C00FB68EF /* InfoPlist.strings */; };
 		D8DC610213D0B87C00FB68EF /* AirForceOnePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */; };
 		D8DC611013D0C6F500FB68EF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DC610E13D0C6F500FB68EF /* Localizable.strings */; };
 		D8DC612613D2810A00FB68EF /* AFOAppleTV.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DC612513D2810A00FB68EF /* AFOAppleTV.m */; };
+		D8DC612813D2A65800FB68EF /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DC60F513D0B87C00FB68EF /* AppKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D8DC60ED13D0B87C00FB68EF /* AirForceOne.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AirForceOne.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8DC60F013D0B87C00FB68EF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D8DC60F213D0B87C00FB68EF /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		D8DC60F513D0B87C00FB68EF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		D8DC60F713D0B87C00FB68EF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -42,7 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8DC60F113D0B87C00FB68EF /* Cocoa.framework in Frameworks */,
+				D8DC612813D2A65800FB68EF /* AppKit.framework in Frameworks */,
 				D8DC60F313D0B87C00FB68EF /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,7 +69,7 @@
 		D8DC60EF13D0B87C00FB68EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D8DC60F013D0B87C00FB68EF /* Cocoa.framework */,
+				D8DC60F513D0B87C00FB68EF /* AppKit.framework */,
 				D8DC60F213D0B87C00FB68EF /* Quartz.framework */,
 				D8DC60F413D0B87C00FB68EF /* Other Frameworks */,
 			);
@@ -80,7 +79,6 @@
 		D8DC60F413D0B87C00FB68EF /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D8DC60F513D0B87C00FB68EF /* AppKit.framework */,
 				D8DC60F713D0B87C00FB68EF /* Foundation.framework */,
 			);
 			name = "Other Frameworks";
