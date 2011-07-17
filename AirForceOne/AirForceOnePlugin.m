@@ -33,6 +33,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @interface AirForceOnePlugIn()
 @property (nonatomic, retain) NSURL* imageURL;
+- (void)_sendToAppleTV;
 - (void)_sendImageToAirFlick;
 @end
 
@@ -117,7 +118,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 	*/
 
     // quick bail
-    if (![self didValueForInputKeyChange:@"inputImageLocation"])
+    if (![self didValueForInputKeyChange:@"inputImageLocation"] || [self.inputImageLocation isEqualToString:@""])
         return YES;
 
     CCDebugLogSelector();
@@ -129,20 +130,21 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 //        NSString* cleanFilePath = [[[baseDirectoryURL path] stringByAppendingPathComponent:self.inputImageLocation] stringByStandardizingPath];
 //        CCDebugLog(@"cleaned file path: %@", cleanFilePath);
         url = [baseDirectoryURL URLByAppendingPathComponent:self.inputImageLocation];
+
+        // TODO - may be better to just let it fail later?
+        if (![url checkResourceIsReachableAndReturnError:NULL]) {
+            return YES;
+        }
     }
 
     self.imageURL = url;
-
-    // TODO - may be better to just let it fail later?
-//    if (![url checkResourceIsReachableAndReturnError:NULL]) {
-//        return YES;
-//    }
 
     // TODO - some sort of file validation?
 
     CCDebugLog(@"should display image at location: %@", self.imageURL);
 
-    [self _sendImageToAirFlick];
+//    [self _sendImageToAirFlick];
+    [self _sendToAppleTV];
 
     return YES;
 }
@@ -163,9 +165,60 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
     CCDebugLogSelector();
 }
 
+#pragma mark - CONNECTION DELEGATE
+
+- (void)connection:(NSURLConnection*)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
+    CCDebugLogSelector();    
+}
+
+- (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response {
+    CCDebugLogSelector();
+
+    CCDebugLog(@"response status: %lu", (long unsigned)[(NSHTTPURLResponse*)response statusCode]);
+}
+
+- (void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
+    CCDebugLogSelector();
+}
+
+- (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error {
+    CCDebugLogSelector();
+
+    [connection release];
+    CCErrorLog(@"ERROR - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection*)connection {
+    CCDebugLogSelector();
+
+    [connection release];
+}
+
 #pragma mark - PRIVATE
 
+- (void)_sendToAppleTV {
+    CCDebugLogSelector();
+
+#define AFOAppleTVHost @"http://10.0.1.22"
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/play", AFOAppleTVHost]];
+    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+#define AFOContentLocation @"http://www.808.dk/pics/video/gizmo.mp4"
+    NSString* bodyString = [NSString stringWithFormat:@"Content-Location: %@\nStart-Position: 0.0000\n", AFOContentLocation];
+    NSData* bodyData = [bodyString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setValue:[NSString stringWithFormat:@"%d", [bodyData length]] forHTTPHeaderField:@"Content-length"];
+    [request setHTTPBody:bodyData];
+
+    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [request release];
+
+    // NB - the connection is released in the failed/finished delegate methods
+    [connection description];
+}
+
 - (void)_sendImageToAirFlick {
+    CCDebugLogSelector();
+
     // check AirFlick is present and running
 #define AirFlickBundleIdentifier @"com.sadun.airplayismybitch"
     if (![[NSWorkspace sharedWorkspace] URLForApplicationWithBundleIdentifier:AirFlickBundleIdentifier]) {
