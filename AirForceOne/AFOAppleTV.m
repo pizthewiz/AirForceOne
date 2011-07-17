@@ -68,7 +68,7 @@
         CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
         // TODO - resize
     }
-#define AFOFileSizeMax 400 * 1024
+#define AFOFileSizeMax 500 * 1024
     else if ([imageData length] > AFOFileSizeMax) {
         CCDebugLog(@"should recompress image from %.2fKB", [imageData length]/1024.);
     }
