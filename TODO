@@ -4,9 +4,9 @@ NOW
 [X] allow Image Location to be a remote URL as well (take from SpectreSupreme)
 [X] shortcut AirFlick entirely and use HTTP info directly:
     https://github.com/norio-nomura/SendToAirFlick
+[X] Apple TV host input
 [ ] internally resize image when appropraite
 [ ] use non-blocking read of image off disk via NSURLConnection
-[ ] Apple TV name and password inputs or settings
 
 LATER
 [ ] support password-protected Apple TV

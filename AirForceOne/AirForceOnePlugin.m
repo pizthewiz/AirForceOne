@@ -33,6 +33,7 @@
 static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @interface AirForceOnePlugIn()
+@property (nonatomic, retain) AFOAppleTV* appleTV;
 @property (nonatomic, retain) NSString* host;
 @property (nonatomic, retain) NSURL* imageURL;
 - (void)_sendToAppleTV;
@@ -42,7 +43,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 @implementation AirForceOnePlugIn
 
 @dynamic inputHost, inputImageLocation;
-@synthesize host = _host, imageURL = _imageURL;
+@synthesize appleTV = _appleTV, host = _host, imageURL = _imageURL;
 
 + (NSDictionary*)attributes {
     NSMutableDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys: 
@@ -114,42 +115,42 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 }
 
 - (BOOL)execute:(id <QCPlugInContext>)context atTime:(NSTimeInterval)time withArguments:(NSDictionary*)arguments {
-	/*
-	Called by Quartz Composer whenever the plug-in instance needs to execute.
-	Only read from the plug-in inputs and produce a result (by writing to the plug-in outputs or rendering to the destination OpenGL context) within that method and nowhere else.
-	Return NO in case of failure during the execution (this will prevent rendering of the current frame to complete).
-	
-	The OpenGL context for rendering can be accessed and defined for CGL macros using:
-	CGLContextObj cgl_ctx = [context CGLContextObj];
-	*/
-
     // quick bail
-    if (![self didValueForInputKeyChange:@"inputImageLocation"] || [self.inputImageLocation isEqualToString:@""])
+    if (![self didValueForInputKeyChange:@"inputHost"] && ![self didValueForInputKeyChange:@"inputImageLocation"])
         return YES;
 
     CCDebugLogSelector();
 
-    NSURL* url = [NSURL URLWithString:self.inputImageLocation];
-    // scheme-less would suggest a relative file url
-    if (![url scheme]) {
-        NSURL* baseDirectoryURL = [[context compositionURL] URLByDeletingLastPathComponent];
-//        NSString* cleanFilePath = [[[baseDirectoryURL path] stringByAppendingPathComponent:self.inputImageLocation] stringByStandardizingPath];
-//        CCDebugLog(@"cleaned file path: %@", cleanFilePath);
-        url = [baseDirectoryURL URLByAppendingPathComponent:self.inputImageLocation];
+    if ([self didValueForInputKeyChange:@"inputHost"]) {
+        AFOAppleTV* appleTV = [[AFOAppleTV alloc] initWithHost:self.inputHost];
+        self.appleTV = appleTV;
+        [appleTV release];
+    }
+    if ([self didValueForInputKeyChange:@"inputImageLocation"]) {
+        NSURL* url = [NSURL URLWithString:self.inputImageLocation];
+        // scheme-less would suggest a relative file url
+        if (![url scheme]) {
+            NSURL* baseDirectoryURL = [[context compositionURL] URLByDeletingLastPathComponent];
+//            NSString* cleanFilePath = [[[baseDirectoryURL path] stringByAppendingPathComponent:self.inputImageLocation] stringByStandardizingPath];
+//            CCDebugLog(@"cleaned file path: %@", cleanFilePath);
+            url = [baseDirectoryURL URLByAppendingPathComponent:self.inputImageLocation];
 
-        // TODO - may be better to just let it fail later?
-        if (![url checkResourceIsReachableAndReturnError:NULL]) {
-            return YES;
+            // TODO - may be better to just let it fail later?
+            if (![url checkResourceIsReachableAndReturnError:NULL]) {
+                return YES;
+            }
         }
+
+        self.imageURL = url;
+
+        // TODO - some sort of file validation?
     }
 
-    self.imageURL = url;
+    if (!self.appleTV || !self.imageURL)
+        return YES;
 
-    // TODO - some sort of file validation?
+    CCDebugLog(@"will display image at location: %@", self.imageURL);
 
-    CCDebugLog(@"should display image at location: %@", self.imageURL);
-
-//    [self _sendImageToAirFlick];
     [self _sendToAppleTV];
 
     return YES;
@@ -161,6 +162,8 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 	*/
 
     CCDebugLogSelector();
+
+    // TODO - [self.appleTV stop] ?
 }
 
 - (void)stopExecution:(id <QCPlugInContext>)context {
@@ -169,6 +172,8 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 	*/
 
     CCDebugLogSelector();
+
+    // TODO - [self.appleTV stop] ?
 }
 
 #pragma mark - PRIVATE
@@ -176,17 +181,17 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 - (void)_sendToAppleTV {
     CCDebugLogSelector();
 
-    if (!_appleTV) {
-#define AFOAppleTVHost @"http://10.0.1.22"
-        _appleTV = [[AFOAppleTV alloc] initWithHost:AFOAppleTVHost];
+    if (!self.appleTV) {
+        CCWarningLog(@"WARNING - Apple TV not configured, cannot display image");
+        return;
     }
 
 // #define AFOVideoURLDefault @"http://www.808.dk/pics/video/gizmo.mp4"
 //     NSURL* contentURL = [[NSURL alloc] initWithString:AFOVideoURLDefault];
-//     [_appleTV playVideoAtURL:contentURL];
+//     [self.appleTV playVideoAtURL:contentURL];
 //     [contentURL release];
 
-    [_appleTV showImageAtURL:_imageURL];
+    [self.appleTV showImageAtURL:_imageURL];
 }
 
 - (void)_sendImageToAirFlick {

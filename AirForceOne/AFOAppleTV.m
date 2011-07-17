@@ -34,14 +34,13 @@
 #pragma mark -
 
 - (void)showImageAtURL:(NSURL*)imageURL {
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/photo", self.host]];
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/photo", self.host]];
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setHTTPMethod:@"PUT"];
 
 #define AFOPhotoTransitionSlideLeft @"SlideLeft"
 #define AFOPhotoTransitionDissolve @"Dissolve" // apparently the default
 //    [request setValue:AFOPhotoTransitionSlideLeft forHTTPHeaderField:@"X-Apple-Transition"];
-
 
     NSError* error;
     // TODO - could use non-blocking read via NSURLConnection instead
@@ -65,9 +64,13 @@
     if (imageSource)
         CFRelease(imageSource);
 
-    if (CGImageGetWidth(image) > AFODisplayWidth*1.5 || CGImageGetHeight(image) > AFODisplayHeight*1.5) {
+    if (CGImageGetWidth(image) >= AFODisplayWidth*1.5 || CGImageGetHeight(image) >= AFODisplayHeight*1.5) {
         CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
         // TODO - resize
+    }
+#define AFOFileSizeMax 400 * 1024
+    else if ([imageData length] > AFOFileSizeMax) {
+        CCDebugLog(@"should recompress image from %.2fKB", [imageData length]/1024.);
     }
     CGImageRelease(image);
 
@@ -83,7 +86,7 @@
 }
 
 // - (void)playVideoAtURL:(NSURL*)videoURL {
-//     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/play", self.host]];
+//     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/play", self.host]];
 //     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
 //     [request setHTTPMethod:@"POST"];
 //     NSString* bodyString = [NSString stringWithFormat:@"Content-Location: %@\nStart-Position: 0.0000\n", [videoURL absoluteURL]];
@@ -99,7 +102,7 @@
 // }
 // 
 // - (void)play {
-//     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/rate", self.host]];
+//     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/rate", self.host]];
 //     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
 //     [request setHTTPMethod:@"POST"];
 // 
@@ -111,7 +114,7 @@
 // }
 // 
 // - (void)pause {
-//     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/rate", self.host]];
+//     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/rate", self.host]];
 //     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
 //     [request setHTTPMethod:@"POST"];
 // 
@@ -123,7 +126,7 @@
 // }
 
 - (void)stop {
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/stop", self.host]];
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/stop", self.host]];
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setHTTPMethod:@"POST"];
 
