@@ -4,12 +4,18 @@ NOW
 [X] allow Image Location to be a remote URL as well (take from SpectreSupreme)
 [X] shortcut AirFlick entirely and use HTTP info directly:
     https://github.com/norio-nomura/SendToAirFlick
-[ ] internally resize image
-[ ] use non-blocking read of image off disk
+[ ] internally resize image when appropraite
+[ ] use non-blocking read of image off disk via NSURLConnection
 [ ] Apple TV name and password inputs or settings
 
 LATER
-[ ] try Content-Location header for remote image locations
+[ ] support password-protected Apple TV
+[\] try Content-Location header for remote image locations
+    no dice
 [ ] add Image input and manage details internally
 [ ] prepopulate Apple TV options via zero-conf:
     _appletv-v2._tcp. or _airplay._tcp.
+[ ] consider using ASIHTTPRequest for simple block usage
+[ ] take a look at other Apple TV events
+    /reverse, /play, /scrub, /rate, /volume, /photo, /authorize, /server-info, /slideshow-features, /playback-info, /stop, /event
+    http://www.tuaw.com/2010/12/08/dear-aunt-tuaw-can-i-airplay-to-my-mac/

@@ -10,7 +10,7 @@
 #import "AirForceOne.h"
 
 @interface AFOAppleTV()
-@property (nonatomic, copy, readwrite) NSString* host;
+@property (nonatomic, retain, readwrite) NSString* host;
 @end
 
 @implementation AFOAppleTV
@@ -20,7 +20,7 @@
 - (id)initWithHost:(NSString*)host {
     self = [super init];
     if (self) {
-        _host = [host copy];
+        _host = [host retain];
     }
     return self;
 }
@@ -39,18 +39,41 @@
     [request setHTTPMethod:@"PUT"];
 
 #define AFOPhotoTransitionSlideLeft @"SlideLeft"
-#define AFOPhotoTransitionDissolve @"Dissolve"
-//    [request setValue:AFOPhotoTransitionDissolve forHTTPHeaderField:@"X-Apple-Transition"];
+#define AFOPhotoTransitionDissolve @"Dissolve" // apparently the default
+//    [request setValue:AFOPhotoTransitionSlideLeft forHTTPHeaderField:@"X-Apple-Transition"];
+
 
     NSError* error;
     // TODO - could use non-blocking read via NSURLConnection instead
-    NSData* bodyData = [[NSData alloc]initWithContentsOfURL:imageURL options:0 error:&error];
-    if (!bodyData) {
+    NSData* imageData = [[NSData alloc]initWithContentsOfURL:imageURL options:0 error:&error];
+    if (!imageData) {
         CCErrorLog(@"ERROR - failed to read image %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+        [request release];
+        return;
     }
-    [request setValue:[NSString stringWithFormat:@"%d", [bodyData length]] forHTTPHeaderField:@"Content-length"];
-    [request setHTTPBody:bodyData];
-    [bodyData release];
+
+#define AFODisplayWidth 1280
+#define AFODisplayHeight 720
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, NULL);
+    if (!imageSource) {
+        CCErrorLog(@"ERROR - failed to crate image source");
+    }
+    CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+    if (!image) {
+        CCErrorLog(@"ERROR - failed to crate image from source");
+    }
+    if (imageSource)
+        CFRelease(imageSource);
+
+    if (CGImageGetWidth(image) > AFODisplayWidth*1.5 || CGImageGetHeight(image) > AFODisplayHeight*1.5) {
+        CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
+        // TODO - resize
+    }
+    CGImageRelease(image);
+
+    [request setValue:[NSString stringWithFormat:@"%d", [imageData length]] forHTTPHeaderField:@"Content-length"];
+    [request setHTTPBody:imageData];
+    [imageData release];
 
     NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     [request release];
@@ -114,7 +137,7 @@
 #pragma mark - CONNECTION DELEGATE
 
 - (void)connection:(NSURLConnection*)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
-    CCDebugLogSelector();
+//    CCDebugLogSelector();
 
     float fractionComplete = MIN(((float)totalBytesWritten/(float)totalBytesExpectedToWrite), 1.);
     CCDebugLog(@"%.2f%% (%.2fKB of %.2fKB)", fractionComplete * 100., totalBytesWritten/1024., totalBytesExpectedToWrite/1024.);
@@ -123,7 +146,11 @@
 - (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response {
     CCDebugLogSelector();
 
-    CCDebugLog(@"response status: %lu", (long unsigned)[(NSHTTPURLResponse*)response statusCode]);
+    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+    if ([httpResponse statusCode] != 200) {
+        // TODO - do something
+    }
+    CCDebugLog(@"response status: %lu", (long unsigned)[httpResponse statusCode]);
 }
 
 - (void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
