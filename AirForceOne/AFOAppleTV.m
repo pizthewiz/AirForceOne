@@ -33,6 +33,30 @@
 
 #pragma mark -
 
+- (void)showImageAtURL:(NSURL*)imageURL {
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/photo", self.host]];
+    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"PUT"];
+
+#define AFOPhotoTransitionSlideLeft @"SlideLeft"
+#define AFOPhotoTransitionDissolve @"Dissolve"
+    [request setValue:AFOPhotoTransitionSlideLeft forHTTPHeaderField:@"X-Apple-Transition"];
+
+    NSError* error;
+    NSData* bodyData = [[NSData alloc]initWithContentsOfURL:imageURL options:0 error:&error];
+    if (!bodyData) {
+        CCErrorLog(@"ERROR - failed to read image %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+    }
+    [request setValue:[NSString stringWithFormat:@"%d", [bodyData length]] forHTTPHeaderField:@"Content-length"];
+    [request setHTTPBody:bodyData];
+
+    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [request release];
+
+    // NB - the connection is released in the failed/finished delegate methods
+    [connection description];
+}
+
 - (void)playVideoAtURL:(NSURL*)videoURL {
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@:7000/play", self.host]];
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];

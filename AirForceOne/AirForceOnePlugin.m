@@ -177,10 +177,12 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         _appleTV = [[AFOAppleTV alloc] initWithHost:AFOAppleTVHost];
     }
 
-#define AFOContentLocation @"http://www.808.dk/pics/video/gizmo.mp4"
-    NSURL* contentURL = [[NSURL alloc] initWithString:AFOContentLocation];
-    [_appleTV playVideoAtURL:contentURL];
-    [contentURL release];
+// #define AFOVideoURLDefault @"http://www.808.dk/pics/video/gizmo.mp4"
+//     NSURL* contentURL = [[NSURL alloc] initWithString:AFOVideoURLDefault];
+//     [_appleTV playVideoAtURL:contentURL];
+//     [contentURL release];
+
+    [_appleTV showImageAtURL:_imageURL];
 }
 
 - (void)_sendImageToAirFlick {

@@ -15,6 +15,7 @@
 - (id)initWithHost:(NSString*)host;
 // @property (nonatomic, readonly) NSString* host;
 
+- (void)showImageAtURL:(NSURL*)imageURL;
 - (void)playVideoAtURL:(NSURL*)videoURL;
 - (void)stopVideo;
 @end
