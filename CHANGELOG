@@ -1,6 +1,7 @@
 
 v0.2.0 (17 July 2011)
-* communicate directly to Apple TV without tethering to AirFlick
+* communicate directly to Apple TV without  AirFlick as a proxy
+* internally resize image if larger than 150% of either 1280x720 dimension
 
 v0.1.1 (15 July 2011)
 * support local and remote image urls and relative file paths
