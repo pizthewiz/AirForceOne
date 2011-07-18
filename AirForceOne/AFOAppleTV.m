@@ -9,6 +9,42 @@
 #import "AFOAppleTV.h"
 #import "AirForceOne.h"
 
+CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
+
+CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor) {
+    CGFloat scaledWidth = floorf(CGImageGetWidth(sourceImage) * scaleFactor);
+    CGFloat scaledHeight = floorf(CGImageGetHeight(sourceImage) * scaleFactor);
+
+    size_t bytesPerRow = scaledWidth * 4;
+    if (bytesPerRow % 16)
+        bytesPerRow = ((bytesPerRow / 16) + 1) * 16;
+
+    void* baseAddress = valloc(scaledHeight * bytesPerRow);
+    if (baseAddress == NULL) {
+        CCErrorLog(@"ERROR - failed to valloc memory for bitmap");
+        return NULL;
+    }
+
+    CGContextRef bitmapContext = CGBitmapContextCreate(baseAddress, scaledWidth, scaledHeight, 8, bytesPerRow, CGImageGetColorSpace(sourceImage), kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Host);
+    if (bitmapContext == NULL) {
+        free(baseAddress);
+        return NULL;
+    }
+
+    CGContextScaleCTM(bitmapContext, scaleFactor, scaleFactor);
+
+    CGRect bounds = CGRectMake(0., 0., CGImageGetWidth(sourceImage), CGImageGetHeight(sourceImage));
+    CGContextClearRect(bitmapContext, bounds);
+    CGContextDrawImage(bitmapContext, bounds, sourceImage);
+
+    CGImageRef scaledImage = CGBitmapContextCreateImage(bitmapContext);
+
+    // cleanup
+    CGContextRelease(bitmapContext);
+
+    return scaledImage;
+}
+
 @interface AFOAppleTV()
 @property (nonatomic, retain, readwrite) NSString* host;
 @end
@@ -44,15 +80,15 @@
 
     NSError* error;
     // TODO - could use non-blocking read via NSURLConnection instead
-    NSData* imageData = [[NSData alloc]initWithContentsOfURL:imageURL options:0 error:&error];
+    NSData* imageData = [[NSData alloc] initWithContentsOfURL:imageURL options:0 error:&error];
     if (!imageData) {
-        CCErrorLog(@"ERROR - failed to read image %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+        CCErrorLog(@"ERROR - failed to read image %@", [error localizedDescription]);
         [request release];
         return;
     }
 
-#define AFODisplayWidth 1280
-#define AFODisplayHeight 720
+#define AFODisplayWidth 1280.
+#define AFODisplayHeight 720.
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, NULL);
     if (!imageSource) {
         CCErrorLog(@"ERROR - failed to crate image source");
@@ -66,12 +102,40 @@
 
     if (CGImageGetWidth(image) >= AFODisplayWidth*1.5 || CGImageGetHeight(image) >= AFODisplayHeight*1.5) {
         CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
-        // TODO - resize
+
+        // resize
+        CGFloat scaleFactor = MAX(AFODisplayWidth/CGImageGetWidth(image), AFODisplayHeight/CGImageGetHeight(image));
+        CGImageRef scaledImage = CreateScaledImageAtFactor(image, scaleFactor);
+        CCDebugLog(@"resized image %lux%lu", CGImageGetWidth(scaledImage), CGImageGetHeight(scaledImage));
+
+        // grab JPEG compressed data from image
+        CFMutableDataRef resizedImageData = CFDataCreateMutable(kCFAllocatorDefault, 0);
+        CGImageDestinationRef destination = CGImageDestinationCreateWithData(resizedImageData, kUTTypeJPEG, 1, NULL);
+        if (!destination) {
+            CCErrorLog(@"ERROR - failed to create in-memory image destination");
+        }
+        CGImageDestinationAddImage(destination, scaledImage, NULL);
+        BOOL status = CGImageDestinationFinalize(destination);
+        if (!status) {
+            CCErrorLog(@"ERROR - failed to write scaled image to in-memory buffer");
+        }
+        if (destination)
+            CFRelease(destination);
+
+        [imageData release];
+        imageData = (NSData*)resizedImageData;
+
+#define SHOULD_WRITE_TEMP_IMAGE_TO_DISK 0
+#if SHOULD_WRITE_TEMP_IMAGE_TO_DISK
+        [imageData writeToFile:[@"~/Desktop/AirForceOne-ResizedImage.jpg" stringByExpandingTildeInPath] atomically:YES];
+#endif
+
+        CGImageRelease(scaledImage);
     }
-#define AFOFileSizeMax 500 * 1024
-    else if ([imageData length] > AFOFileSizeMax) {
-        CCDebugLog(@"should recompress image from %.2fKB", [imageData length]/1024.);
-    }
+//#define AFOFileSizeMax 600 * 1024
+//    else if ([imageData length] > AFOFileSizeMax) {
+//        CCDebugLog(@"should recompress image from %.2fKB", [imageData length]/1024.);
+//    }
     CGImageRelease(image);
 
     [request setValue:[NSString stringWithFormat:@"%d", [imageData length]] forHTTPHeaderField:@"Content-length"];
@@ -122,7 +186,7 @@
 //     [request release];
 // 
 //     // NB - the connection is released in the failed/finished delegate methods
-//     [connection description];    
+//     [connection description];
 // }
 
 - (void)stop {
@@ -164,7 +228,7 @@
     CCDebugLogSelector();
 
     [connection release];
-    CCErrorLog(@"ERROR - %@ %@", [error localizedDescription], [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
+    CCErrorLog(@"ERROR - %@", [error localizedDescription]);
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection*)connection {
