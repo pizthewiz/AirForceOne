@@ -10,10 +10,13 @@
 #import "AirForceOne.h"
 
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
+CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor);
 
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor) {
-    CGFloat scaledWidth = floorf(CGImageGetWidth(sourceImage) * scaleFactor);
-    CGFloat scaledHeight = floorf(CGImageGetHeight(sourceImage) * scaleFactor);
+    CGFloat sourceWidth = CGImageGetWidth(sourceImage);
+    CGFloat sourceHeight = CGImageGetHeight(sourceImage);
+    CGFloat scaledWidth = floorf(sourceWidth * scaleFactor);
+    CGFloat scaledHeight = floorf(sourceHeight * scaleFactor);
 
     size_t bytesPerRow = scaledWidth * 4;
     if (bytesPerRow % 16)
@@ -33,17 +36,39 @@ CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor
 
     CGContextScaleCTM(bitmapContext, scaleFactor, scaleFactor);
 
-    CGRect bounds = CGRectMake(0., 0., CGImageGetWidth(sourceImage), CGImageGetHeight(sourceImage));
+    CGRect bounds = CGRectMake(0., 0., sourceWidth, sourceHeight);
     CGContextClearRect(bitmapContext, bounds);
     CGContextDrawImage(bitmapContext, bounds, sourceImage);
 
     CGImageRef scaledImage = CGBitmapContextCreateImage(bitmapContext);
-
-    // cleanup
     CGContextRelease(bitmapContext);
 
     return scaledImage;
 }
+
+CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressionFactor) {
+    CFMutableDataRef imageData = CFDataCreateMutable(kCFAllocatorDefault, 0);
+    CGImageDestinationRef destination = CGImageDestinationCreateWithData(imageData, kUTTypeJPEG, 1, NULL);
+    if (!destination) {
+        CCErrorLog(@"ERROR - failed to create in-memory image destination");
+        return NULL;
+    }
+    // set JPEG compression to 50%
+    NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:compressionFactor], kCGImageDestinationLossyCompressionQuality, nil];
+    CGImageDestinationAddImage(destination, image, (CFDictionaryRef)properties);
+    [properties release];
+    BOOL status = CGImageDestinationFinalize(destination);
+    if (!status) {
+        CCErrorLog(@"ERROR - failed to write scaled image to in-memory buffer");
+        CFRelease(destination);
+        return NULL;
+    }
+    CFRelease(destination);
+
+    return (CFDataRef)imageData;
+}
+
+#pragma mark -
 
 @interface AFOAppleTV()
 @property (nonatomic, retain, readwrite) NSString* host;
@@ -87,6 +112,7 @@ CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor
         return;
     }
 
+
 #define AFODisplayWidth 1280.
 #define AFODisplayHeight 720.
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, NULL);
@@ -109,37 +135,23 @@ CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor
         CCDebugLog(@"resized image %lux%lu", CGImageGetWidth(scaledImage), CGImageGetHeight(scaledImage));
 
         // grab JPEG compressed data from image
-        CFMutableDataRef resizedImageData = CFDataCreateMutable(kCFAllocatorDefault, 0);
-        CGImageDestinationRef destination = CGImageDestinationCreateWithData(resizedImageData, kUTTypeJPEG, 1, NULL);
-        if (!destination) {
-            CCErrorLog(@"ERROR - failed to create in-memory image destination");
-        }
-        // set JPEG compression to 50%
-        NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:0.5], kCGImageDestinationLossyCompressionQuality, nil];
-        CGImageDestinationAddImage(destination, scaledImage, (CFDictionaryRef)properties);
-        [properties release];
-        BOOL status = CGImageDestinationFinalize(destination);
-        if (!status) {
-            CCErrorLog(@"ERROR - failed to write scaled image to in-memory buffer");
-        }
-        if (destination)
-            CFRelease(destination);
+        CFDataRef compressedImage = CreateCompressedJPEGDataFromImage(scaledImage, 0.5);
+        CGImageRelease(scaledImage);
 
         [imageData release];
-        imageData = (NSData*)resizedImageData;
+        imageData = (NSData*)compressedImage;
 
 #define SHOULD_WRITE_TEMP_IMAGE_TO_DISK 0
 #if SHOULD_WRITE_TEMP_IMAGE_TO_DISK
         [imageData writeToFile:[@"~/Desktop/AirForceOne-ResizedImage.jpg" stringByExpandingTildeInPath] atomically:YES];
 #endif
-
-        CGImageRelease(scaledImage);
     }
 //#define AFOFileSizeMax 600 * 1024
 //    else if ([imageData length] > AFOFileSizeMax) {
 //        CCDebugLog(@"should recompress image from %.2fKB", [imageData length]/1024.);
 //    }
     CGImageRelease(image);
+
 
     [request setValue:[NSString stringWithFormat:@"%d", [imageData length]] forHTTPHeaderField:@"Content-length"];
     [request setHTTPBody:imageData];
