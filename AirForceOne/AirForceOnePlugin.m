@@ -10,26 +10,6 @@
 #import "AirForceOne.h"
 #import "AFOAppleTV.h"
 
-@implementation NSWorkspace(CCAdditions)
-
-- (BOOL)isRunningApplicationWithBundleIdentifier:(NSString*)bundleIdentifier {
-    __block BOOL status = NO;
-    
-    NSArray* runningApplications = [self runningApplications];
-    [runningApplications enumerateObjectsUsingBlock:^(id application, NSUInteger idx, BOOL *stop) {
-        if ([[[application bundleIdentifier] lowercaseString] isEqualToString:bundleIdentifier]) {
-            status = YES;
-            *stop = YES;
-        }
-    }];
-    
-    return status;
-}
-
-@end
-
-#pragma mark - PLUGIN
-
 static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @interface AirForceOnePlugIn()
@@ -37,7 +17,6 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 @property (nonatomic, retain) NSString* host;
 @property (nonatomic, retain) NSURL* imageURL;
 - (void)_sendToAppleTV;
-- (void)_sendImageToAirFlick;
 @end
 
 @implementation AirForceOnePlugIn
@@ -192,34 +171,6 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 //     [contentURL release];
 
     [self.appleTV showImageAtURL:_imageURL];
-}
-
-- (void)_sendImageToAirFlick {
-    CCDebugLogSelector();
-
-    // check AirFlick is present and running
-#define AirFlickBundleIdentifier @"com.sadun.airplayismybitch"
-    if (![[NSWorkspace sharedWorkspace] URLForApplicationWithBundleIdentifier:AirFlickBundleIdentifier]) {
-        CCErrorLog(@"ERROR - AirFlick.app is not found");
-        return;
-    }
-    if (![[NSWorkspace sharedWorkspace] isRunningApplicationWithBundleIdentifier:AirFlickBundleIdentifier]) {
-        CCErrorLog(@"ERROR - AirFlick.app is not running");
-        return;
-    }
-
-    // via https://gist.github.com/755600
-    NSDictionary* slideDescription = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"show-photo", @"RequestType",
-        [self.imageURL absoluteString], @"MediaLocation",
-//        @"1", @"Rotation",
-//        @"Dissolve", @"Transition",
-        nil];
-
-    CCDebugLog(@"sending: %@", slideDescription);
-
-#define AirFlickNotificationName @"com.sadun.airflick"
-    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:AirFlickNotificationName object:nil userInfo:slideDescription deliverImmediately:YES];
 }
 
 @end
