@@ -114,7 +114,10 @@ CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor
         if (!destination) {
             CCErrorLog(@"ERROR - failed to create in-memory image destination");
         }
-        CGImageDestinationAddImage(destination, scaledImage, NULL);
+        // set JPEG compression to 50%
+        NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:0.5], kCGImageDestinationLossyCompressionQuality, nil];
+        CGImageDestinationAddImage(destination, scaledImage, (CFDictionaryRef)properties);
+        [properties release];
         BOOL status = CGImageDestinationFinalize(destination);
         if (!status) {
             CCErrorLog(@"ERROR - failed to write scaled image to in-memory buffer");

@@ -10,7 +10,7 @@ NOW
 [ ] use non-blocking read of image off disk via NSURLConnection
 
 LATER
-[ ] investigate JPEG compression options on resize
+[X] investigate JPEG compression options on resize
 [ ] support password-protected Apple TV
 [\] try Content-Location header for remote image locations
     the /photo action only accepts image data, not references
