@@ -51,6 +51,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     CGImageDestinationRef destination = CGImageDestinationCreateWithData(imageData, kUTTypeJPEG, 1, NULL);
     if (!destination) {
         CCErrorLog(@"ERROR - failed to create in-memory image destination");
+        CFRelease(imageData);
         return NULL;
     }
     // set JPEG compression to 50%
@@ -60,6 +61,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     BOOL status = CGImageDestinationFinalize(destination);
     if (!status) {
         CCErrorLog(@"ERROR - failed to write scaled image to in-memory buffer");
+        CFRelease(imageData);
         CFRelease(destination);
         return NULL;
     }
