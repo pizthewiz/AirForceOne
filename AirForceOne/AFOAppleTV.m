@@ -95,20 +95,11 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 #pragma mark -
 
 - (void)showImageAtURL:(NSURL*)imageURL {
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/photo", self.host]];
-    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
-    [request setHTTPMethod:@"PUT"];
-
-#define AFOPhotoTransitionSlideLeft @"SlideLeft"
-#define AFOPhotoTransitionDissolve @"Dissolve" // apparently the default
-//    [request setValue:AFOPhotoTransitionSlideLeft forHTTPHeaderField:@"X-Apple-Transition"];
-
     NSError* error;
     // TODO - could use non-blocking read via NSURLConnection instead
     NSData* imageData = [[NSData alloc] initWithContentsOfURL:imageURL options:0 error:&error];
     if (!imageData) {
         CCErrorLog(@"ERROR - failed to read image %@", [error localizedDescription]);
-        [request release];
         return;
     }
 
@@ -151,6 +142,14 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 //        CCDebugLog(@"should recompress image from %.2fKB", [imageData length]/1024.);
 //    }
     CGImageRelease(image);
+
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/photo", self.host]];
+    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"PUT"];
+    
+#define AFOPhotoTransitionSlideLeft @"SlideLeft"
+#define AFOPhotoTransitionDissolve @"Dissolve" // apparently the default
+    //    [request setValue:AFOPhotoTransitionSlideLeft forHTTPHeaderField:@"X-Apple-Transition"];
 
 
     [request setValue:[NSString stringWithFormat:@"%d", [imageData length]] forHTTPHeaderField:@"Content-length"];
