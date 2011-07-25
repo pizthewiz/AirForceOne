@@ -25,7 +25,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 @synthesize appleTV = _appleTV, host = _host, imageURL = _imageURL;
 
 + (NSDictionary*)attributes {
-    NSMutableDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys: 
+    NSMutableDictionary* attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys: 
        CCLocalizedString(@"kQCPlugIn_Name", NULL), QCPlugInAttributeNameKey, 
        CCLocalizedString(@"kQCPlugIn_Description", NULL), QCPlugInAttributeDescriptionKey, 
        nil];
