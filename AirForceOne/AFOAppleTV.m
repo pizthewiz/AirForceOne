@@ -74,6 +74,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
 @interface AFOAppleTV()
 @property (nonatomic, retain, readwrite) NSString* host;
+- (void)_showImageWithData:(NSData*)imageData;
 @end
 
 @implementation AFOAppleTV
@@ -105,9 +106,6 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         return;
     }
 
-
-#define AFODisplayWidth 1280.
-#define AFODisplayHeight 720.
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, NULL);
     if (!imageSource) {
         CCErrorLog(@"ERROR - failed to crate image source");
@@ -119,6 +117,8 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     if (imageSource)
         CFRelease(imageSource);
 
+#define AFODisplayWidth 1280.
+#define AFODisplayHeight 720.
     if (CGImageGetWidth(image) >= AFODisplayWidth*1.5 || CGImageGetHeight(image) >= AFODisplayHeight*1.5) {
         CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
 
@@ -145,24 +145,8 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 //    }
     CGImageRelease(image);
 
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/photo", self.host]];
-    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
-    [request setHTTPMethod:@"PUT"];
-    
-#define AFOPhotoTransitionSlideLeft @"SlideLeft"
-#define AFOPhotoTransitionDissolve @"Dissolve" // apparently the default
-    //    [request setValue:AFOPhotoTransitionSlideLeft forHTTPHeaderField:@"X-Apple-Transition"];
-
-
-    [request setValue:[NSString stringWithFormat:@"%d", [imageData length]] forHTTPHeaderField:@"Content-length"];
-    [request setHTTPBody:imageData];
+    [self _showImageWithData:imageData];
     [imageData release];
-
-    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    [request release];
-
-    // NB - the connection is released in the failed/finished delegate methods
-    [connection description];
 }
 
 // - (void)playVideoAtURL:(NSURL*)videoURL {
@@ -251,6 +235,27 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     CCDebugLogSelector();
 
     [connection release];
+}
+
+#pragma mark - PRIVATE
+
+- (void)_showImageWithData:(NSData*)imageData {
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:7000/photo", self.host]];
+    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"PUT"];
+
+#define AFOPhotoTransitionSlideLeft @"SlideLeft"
+#define AFOPhotoTransitionDissolve @"Dissolve" // apparently the default
+//    [request setValue:AFOPhotoTransitionSlideLeft forHTTPHeaderField:@"X-Apple-Transition"];
+
+    [request setValue:[NSString stringWithFormat:@"%d", [imageData length]] forHTTPHeaderField:@"Content-length"];
+    [request setHTTPBody:imageData];
+
+    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [request release];
+
+    // NB - the connection is released in the failed/finished delegate methods
+    [connection description];
 }
 
 @end
