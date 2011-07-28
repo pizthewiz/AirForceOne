@@ -38,7 +38,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
     }
     if (&QCPlugInAttributeExamplesKey != NULL) {
         // array of file paths or urls relative to plugin resources
-        NSArray* examples = [NSArray arrayWithObjects:[[NSBundle mainBundle] URLForResource:AFOExampleCompositionName withExtension:@"qtz"], nil];
+        NSArray* examples = [NSArray arrayWithObjects:[[NSBundle bundleForClass:[self class]] URLForResource:AFOExampleCompositionName withExtension:@"qtz"], nil];
         [attributes setObject:examples forKey:QCPlugInAttributeExamplesKey];
     }
 #endif
