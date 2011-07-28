@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D864241113E12D52002B9A65 /* Display On Apple TV.qtz in Resources */ = {isa = PBXBuildFile; fileRef = D8DC611213D0FADA00FB68EF /* Display On Apple TV.qtz */; };
 		D8DC60F313D0B87C00FB68EF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DC60F213D0B87C00FB68EF /* Quartz.framework */; };
 		D8DC60FF13D0B87C00FB68EF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DC60FD13D0B87C00FB68EF /* InfoPlist.strings */; };
 		D8DC610213D0B87C00FB68EF /* AirForceOnePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */; };
@@ -167,6 +168,7 @@
 			files = (
 				D8DC60FF13D0B87C00FB68EF /* InfoPlist.strings in Resources */,
 				D8DC611013D0C6F500FB68EF /* Localizable.strings in Resources */,
+				D864241113E12D52002B9A65 /* Display On Apple TV.qtz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,7 +201,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/rake update_bundle_version\n";
+			shellScript = "/usr/local/bin/macrake update_bundle_version\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -1,6 +1,6 @@
 
 require 'rake'
-require 'osx/cocoa'
+framework 'Foundation'
 
 GIT = '/usr/bin/git'
 BUNDLE_IDENTIFIER_KEY = 'CFBundleIdentifier'
@@ -14,7 +14,7 @@ ARCHIVE_EXCLUDE_FILES = %w()
 
 # helpers
 def build_number
-  `#{GIT} log --pretty=format:'' | wc -l`.scan(/\d/).to_s
+  `#{GIT} log --pretty=format:'' | wc -l`.scan(/\d+/).first
 end
 def build_string
   string = `#{GIT} describe --dirty`
@@ -26,8 +26,8 @@ def head_rev
   rev.strip unless rev.nil? or rev.empty?
 end
 def select_file(filepath)
-  url = OSX::NSURL.URLWithString filepath
-  OSX::NSWorkspace.sharedWorkspace.activateFileViewerSelectingURLs([url])
+  url = NSURL.fileURLWithPath filepath
+  NSWorkspace.sharedWorkspace.activateFileViewerSelectingURLs([url])
 end
 
 # tasks
@@ -38,13 +38,6 @@ task :update_bundle_version, [:build_dir, :infoplist_path] do |t, args|
   # http://github.com/digdog/xcode-git-cfbundleversion/
   # http://github.com/jsallis/xcode-git-versioner
   # http://github.com/juretta/iphone-project-tools/tree/v1.0.3
-  require 'rubygems'
-  begin
-      require 'Plist'
-  rescue LoadError => e
-      puts "ERROR - cannot find gem 'Plist'"
-      exit 1
-  end
 
   build_dir = ENV['BUILT_PRODUCTS_DIR'] || args.build_dir
   infoplist_path = ENV['INFOPLIST_PATH'] || args.infoplist_path
@@ -53,25 +46,33 @@ task :update_bundle_version, [:build_dir, :infoplist_path] do |t, args|
     exit 1
   end
 
-  product_plist = File.join(build_dir, infoplist_path)
-  unless File.file? product_plist
-    puts "ERROR - cannot find build product's info plist at path '#{product_plist}'"
+  product_plist_path = File.join(build_dir, infoplist_path)
+  unless File.file? product_plist_path
+    puts "ERROR - cannot find build product's info plist at path '#{product_plist_path}'"
     exit 1
   end
 
   synthesized_build_number = build_number
   synthesized_build_string = build_string
 
-  # update product plist
-  `/usr/bin/plutil -convert xml1 \"#{product_plist}\"`
-  info = Plist::parse_xml(product_plist)
-  if info
-      info[BUNDLE_VERSION_NUMBER_KEY] = synthesized_build_number
-      info[BUNDLE_VERSION_STRING_KEY] = synthesized_build_string unless synthesized_build_string.empty?
-      info[HEAD_REVISION_KEY] = head_rev
-      info.save_plist(product_plist)
+  # update plist
+  info = NSMutableDictionary.dictionaryWithContentsOfFile product_plist_path
+  info[BUNDLE_VERSION_NUMBER_KEY] = synthesized_build_number
+  info[BUNDLE_VERSION_STRING_KEY] = synthesized_build_string unless synthesized_build_string.empty?
+  info[HEAD_REVISION_KEY] = head_rev
+
+  # rewrite plist to disk
+  error = Pointer.new(:object)
+  data = NSPropertyListSerialization.dataWithPropertyList(info, format:NSPropertyListXMLFormat_v1_0, options:0, error:error)
+  if error[0]
+    puts "ERROR - failed to serialize plist"
+    exit 1
   end
-  `/usr/bin/plutil -convert binary1 \"#{product_plist}\"`
+  status = data.writeToFile(product_plist_path, atomically:true)
+  unless status
+    puts "ERROR - failed to write updated plist to disk"
+    exit 1    
+  end
 
   # friendly output
   puts "updated '#{BUNDLE_VERSION_NUMBER_KEY}' in '#{File.basename(infoplist_path)}' to #{synthesized_build_number}"
