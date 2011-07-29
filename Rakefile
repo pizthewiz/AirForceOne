@@ -1,6 +1,6 @@
 
 require 'rake'
-framework 'Foundation'
+framework 'AppKit'
 
 GIT = '/usr/bin/git'
 BUNDLE_IDENTIFIER_KEY = 'CFBundleIdentifier'
