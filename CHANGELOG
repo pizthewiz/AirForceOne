@@ -1,4 +1,7 @@
 
+v0.2.2 (2 Aug 2011)
+* embed example composition into patch and properly categorize on Lion
+
 v0.2.1 (18 July 2011)
 * use 50% JPEG compression when internally resizing and compressing image
 
