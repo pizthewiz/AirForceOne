@@ -131,7 +131,6 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
 - (void)dealloc {
     [_connection release];
-//    [_timeoutTimer release];
     [_response release];
     [_accumulatedData release];
 
@@ -335,47 +334,30 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setHTTPMethod:@"POST"];
 
-    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    LDURLLoader* loader = [LDURLLoader loaderWithRequest:request];
+    [loader setTimeout:1 handler:^(void) {
+        CCDebugLog(@"timeout");
+    }];
+    [loader setResponseHandler:^(NSURLResponse* response) {
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+        if ([httpResponse statusCode] != 200) {
+            // TODO - do something
+        }
+        CCDebugLog(@"response status: %lu", (long unsigned)[httpResponse statusCode]);
+    }];
+    [loader setProgressHandler:^(long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        float fractionComplete = MIN(((float)totalBytesWritten/(float)totalBytesExpectedToWrite), 1.);
+        CCDebugLog(@"%.2f%% (%.2fKB of %.2fKB)", fractionComplete * 100., totalBytesWritten/1024., totalBytesExpectedToWrite/1024.);
+    }];
+    [loader setFinishedHandler:^(NSData *data, NSURLResponse *response) {
+        CCDebugLog(@"finished");
+    }];
+    [loader setErrorHandler:^(NSError* error){
+        CCErrorLog(@"ERROR - %@", [error localizedDescription]);
+    }];
+    [loader start];
+
     [request release];
-
-    // NB - the connection is released in the failed/finished delegate methods
-    [connection description];
-}
-
-#pragma mark - CONNECTION DELEGATE
-
-- (void)connection:(NSURLConnection*)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
-//    CCDebugLogSelector();
-
-    float fractionComplete = MIN(((float)totalBytesWritten/(float)totalBytesExpectedToWrite), 1.);
-    CCDebugLog(@"%.2f%% (%.2fKB of %.2fKB)", fractionComplete * 100., totalBytesWritten/1024., totalBytesExpectedToWrite/1024.);
-}
-
-- (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response {
-    CCDebugLogSelector();
-
-    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
-    if ([httpResponse statusCode] != 200) {
-        // TODO - do something
-    }
-    CCDebugLog(@"response status: %lu", (long unsigned)[httpResponse statusCode]);
-}
-
-- (void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data {
-    CCDebugLogSelector();
-}
-
-- (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error {
-    CCDebugLogSelector();
-
-    [connection release];
-    CCErrorLog(@"ERROR - %@", [error localizedDescription]);
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection*)connection {
-    CCDebugLogSelector();
-
-    [connection release];
 }
 
 #pragma mark - PRIVATE
@@ -392,11 +374,30 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     [request setValue:[NSString stringWithFormat:@"%d", [imageData length]] forHTTPHeaderField:@"Content-length"];
     [request setHTTPBody:imageData];
 
-    NSURLConnection* connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    [request release];
+    LDURLLoader* loader = [LDURLLoader loaderWithRequest:request];
+    [loader setTimeout:1 handler:^(void) {
+        CCDebugLog(@"timeout");
+    }];
+    [loader setResponseHandler:^(NSURLResponse* response) {
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+        if ([httpResponse statusCode] != 200) {
+            // TODO - do something
+        }
+        CCDebugLog(@"response status: %lu", (long unsigned)[httpResponse statusCode]);
+    }];
+    [loader setProgressHandler:^(long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        float fractionComplete = MIN(((float)totalBytesWritten/(float)totalBytesExpectedToWrite), 1.);
+        CCDebugLog(@"%.2f%% (%.2fKB of %.2fKB)", fractionComplete * 100., totalBytesWritten/1024., totalBytesExpectedToWrite/1024.);
+    }];
+    [loader setFinishedHandler:^(NSData *data, NSURLResponse *response) {
+        CCDebugLog(@"finished");
+    }];
+    [loader setErrorHandler:^(NSError* error){
+        CCErrorLog(@"ERROR - %@", [error localizedDescription]);
+    }];
+    [loader start];
 
-    // NB - the connection is released in the failed/finished delegate methods
-    [connection description];
+    [request release];
 }
 
 @end
