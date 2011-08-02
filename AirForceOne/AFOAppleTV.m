@@ -88,7 +88,9 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     void (^_finishedHandler)(NSData*, NSURLResponse*);
     void (^_errorHandler)(NSError*);
 }
++ (id)loaderWithRequest:(NSURLRequest*)request;
 + (id)loaderWithURL:(NSURL*)url;
+- (id)initWithRequest:(NSURLRequest*)request;
 - (id)initWithURL:(NSURL*)url;
 
 - (void)setTimeout:(NSTimeInterval)timeout handler:(void (^)(void))cb;
@@ -104,16 +106,26 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
 @implementation LDURLLoader
 + (id)loaderWithURL:(NSURL*)url {
-    return [[[self alloc] initWithURL:url] autorelease];
+    return [[[self alloc] initWithRequest:[NSURLRequest requestWithURL:url]] autorelease];
+}
+
++ (id)loaderWithRequest:(NSURLRequest*)request {
+    return [[[self alloc] initWithRequest:request] autorelease];
+}
+
+- (id)initWithRequest:(NSURLRequest*)request {
+    self = [super init];
+    if (self) {
+        _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+    }
+    return self;
 }
 
 - (id)initWithURL:(NSURL*)url {
-    self = [super init];
-    if (self) {
-        NSURLRequest* request = [[NSURLRequest alloc] initWithURL:url];
-        _connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-        [request release];
-    }
+    NSURLRequest* request = [[NSURLRequest alloc] initWithURL:url];
+    self = [self initWithRequest:request];
+    [request release];
+
     return self;
 }
 
