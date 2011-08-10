@@ -19,6 +19,10 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 - (void)_sendToAppleTV;
 @end
 
+// WORKAROUND - radar://problem/9927446 Lion added QCPlugInAttribute key constants not weak linked
+#pragma weak QCPlugInAttributeCategoriesKey
+#pragma weak QCPlugInAttributeExamplesKey
+
 @implementation AirForceOnePlugIn
 
 @dynamic inputHost, inputImageLocation;
