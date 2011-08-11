@@ -1,4 +1,7 @@
 
+v0.2.3 (10 Aug 2011)
+* fix crash caused by release of un-retained response object
+
 v0.2.2 (10 Aug 2011)
 * fix attempted connection to default host of ""
 * embed example composition into patch and properly categorize on Lion

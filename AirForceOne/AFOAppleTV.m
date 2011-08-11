@@ -183,7 +183,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 }
 
 - (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response {
-    _response = response;
+    _response = [response retain];
     _responseLengthEstimate = [response expectedContentLength];
     if (_responseHandler)
         _responseHandler(response);
