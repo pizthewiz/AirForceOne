@@ -54,7 +54,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         CFRelease(imageData);
         return NULL;
     }
-    // set JPEG compression to 50%
+    // set JPEG compression
     NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:compressionFactor], kCGImageDestinationLossyCompressionQuality, nil];
     CGImageDestinationAddImage(destination, image, (CFDictionaryRef)properties);
     [properties release];
