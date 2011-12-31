@@ -9,26 +9,9 @@
 #import "AirForceOnePlugIn.h"
 #import "AirForceOne.h"
 #import "AFOAppleTV.h"
+#import "NSURL+CCExtensions.h"
 
 static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
-
-
-@interface NSURL(CCAdditions)
-- (id)initFileURLWithPossiblyRelativePath:(NSString*)path relativeTo:(NSString*)base isDirectory:(BOOL)isDir;
-@end
-@implementation NSURL(CCAdditions)
-- (id)initFileURLWithPossiblyRelativePath:(NSString*)filePath relativeTo:(NSString*)base isDirectory:(BOOL)isDir {
-    if ([filePath hasPrefix:@"../"] || [filePath hasPrefix:@"./"] || ![filePath hasPrefix:@"/"]) {
-        filePath = [base stringByAppendingPathComponent:[filePath stringByStandardizingPath]];
-    }
-    filePath = [filePath stringByStandardizingPath];
-    
-    self = [self initFileURLWithPath:filePath isDirectory:isDir];
-    if (self) {
-    }
-    return self;
-}
-@end
 
 @interface AirForceOnePlugIn()
 @property (nonatomic, retain) AFOAppleTV* appleTV;

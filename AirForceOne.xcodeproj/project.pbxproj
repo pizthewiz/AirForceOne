@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D864241113E12D52002B9A65 /* Display On Apple TV.qtz in Resources */ = {isa = PBXBuildFile; fileRef = D8DC611213D0FADA00FB68EF /* Display On Apple TV.qtz */; };
+		D89336BE14AF73D600F4D604 /* NSURL+CCExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D89336BD14AF73D600F4D604 /* NSURL+CCExtensions.m */; };
 		D8DC60F313D0B87C00FB68EF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DC60F213D0B87C00FB68EF /* Quartz.framework */; };
 		D8DC60FF13D0B87C00FB68EF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DC60FD13D0B87C00FB68EF /* InfoPlist.strings */; };
 		D8DC610213D0B87C00FB68EF /* AirForceOnePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D89336BC14AF73D600F4D604 /* NSURL+CCExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+CCExtensions.h"; sourceTree = "<group>"; };
+		D89336BD14AF73D600F4D604 /* NSURL+CCExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+CCExtensions.m"; sourceTree = "<group>"; };
 		D8DC60ED13D0B87C00FB68EF /* AirForceOne.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AirForceOne.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8DC60F213D0B87C00FB68EF /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		D8DC60F513D0B87C00FB68EF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -93,6 +96,8 @@
 				D8DC612513D2810A00FB68EF /* AFOAppleTV.m */,
 				D8DC610013D0B87C00FB68EF /* AirForceOnePlugin.h */,
 				D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */,
+				D89336BC14AF73D600F4D604 /* NSURL+CCExtensions.h */,
+				D89336BD14AF73D600F4D604 /* NSURL+CCExtensions.m */,
 				D8DC60FB13D0B87C00FB68EF /* Supporting Files */,
 				D8DC610C13D0C4E600FB68EF /* README.markdown */,
 				D8DC610B13D0C4E600FB68EF /* Rakefile */,
@@ -212,6 +217,7 @@
 			files = (
 				D8DC610213D0B87C00FB68EF /* AirForceOnePlugin.m in Sources */,
 				D8DC612613D2810A00FB68EF /* AFOAppleTV.m in Sources */,
+				D89336BE14AF73D600F4D604 /* NSURL+CCExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
