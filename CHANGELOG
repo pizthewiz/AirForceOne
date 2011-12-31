@@ -1,4 +1,9 @@
 
+v0.2.4 (31 Dec 2011)
+* send explicit stop command on disableExecution which can reset the Apple TV
+* allow source image relative file paths to be more robust
+* add HTTP URL support for soure image
+
 v0.2.3 (10 Aug 2011)
 * fix crash caused by release of un-retained response object
 
