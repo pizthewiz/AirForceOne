@@ -11,7 +11,7 @@
 @implementation NSURL (CCExtensions)
 
 - (id)initFileURLWithPossiblyRelativePath:(NSString*)filePath relativeTo:(NSString*)base isDirectory:(BOOL)isDir {
-    if ([filePath hasPrefix:@"../"] || [filePath hasPrefix:@"./"] || ![filePath hasPrefix:@"/"]) {
+    if (![filePath hasPrefix:@"/"]) {
         filePath = [base stringByAppendingPathComponent:[filePath stringByStandardizingPath]];
     }
     filePath = [filePath stringByStandardizingPath];
