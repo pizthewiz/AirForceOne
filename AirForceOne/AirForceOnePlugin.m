@@ -146,7 +146,8 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
     CCDebugLogSelector();
 
-    // TODO - [self.appleTV stop] ?
+
+    [self.appleTV stop];
 }
 
 - (void)stopExecution:(id <QCPlugInContext>)context {

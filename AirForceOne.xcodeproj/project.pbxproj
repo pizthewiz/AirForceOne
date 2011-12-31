@@ -142,7 +142,7 @@
 		D8DC60E313D0B87C00FB68EF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = D8DC60E613D0B87C00FB68EF /* Build configuration list for PBXProject "AirForceOne" */;
 			compatibilityVersion = "Xcode 3.2";
