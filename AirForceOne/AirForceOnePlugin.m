@@ -12,6 +12,24 @@
 
 static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
+
+@interface NSURL(CCAdditions)
+- (id)initFileURLWithPossiblyRelativePath:(NSString*)path relativeTo:(NSString*)base isDirectory:(BOOL)isDir;
+@end
+@implementation NSURL(CCAdditions)
+- (id)initFileURLWithPossiblyRelativePath:(NSString*)filePath relativeTo:(NSString*)base isDirectory:(BOOL)isDir {
+    if ([filePath hasPrefix:@"../"] || [filePath hasPrefix:@"./"] || ![filePath hasPrefix:@"/"]) {
+        filePath = [base stringByAppendingPathComponent:[filePath stringByStandardizingPath]];
+    }
+    filePath = [filePath stringByStandardizingPath];
+    
+    self = [self initFileURLWithPath:filePath isDirectory:isDir];
+    if (self) {
+    }
+    return self;
+}
+@end
+
 @interface AirForceOnePlugIn()
 @property (nonatomic, retain) AFOAppleTV* appleTV;
 @property (nonatomic, retain) NSString* host;
@@ -112,18 +130,16 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         [appleTV release];
     }
     if ([self didValueForInputKeyChange:@"inputImageLocation"]) {
-        NSURL* url = [NSURL URLWithString:self.inputImageLocation];
-        // scheme-less would suggest a relative file url
-        if (![url scheme]) {
-            NSURL* baseDirectoryURL = [[context compositionURL] URLByDeletingLastPathComponent];
-//            NSString* cleanFilePath = [[[baseDirectoryURL path] stringByAppendingPathComponent:self.inputImageLocation] stringByStandardizingPath];
-//            CCDebugLog(@"cleaned file path: %@", cleanFilePath);
-            url = [baseDirectoryURL URLByAppendingPathComponent:self.inputImageLocation];
-
-            // TODO - may be better to just let it fail later?
-            if (![url checkResourceIsReachableAndReturnError:NULL]) {
-                return YES;
-            }
+        NSString* baseDirectory = [[[context compositionURL] URLByDeletingLastPathComponent] path];
+        NSURL* url = [[[NSURL alloc] initFileURLWithPossiblyRelativePath:self.inputImageLocation relativeTo:baseDirectory isDirectory:NO] autorelease];
+        // TODO - may be better to just let it fail later?
+        if (![url isFileURL]) {
+            CCErrorLog(@"ERROR - filed to create URL for path '%@'", self.inputImageLocation);
+        }
+        NSError* error;
+        if (![url checkResourceIsReachableAndReturnError:&error]) {
+            CCErrorLog(@"ERROR - bad image URL: %@", [error localizedDescription]);
+            return YES;
         }
 
         self.imageURL = url;
