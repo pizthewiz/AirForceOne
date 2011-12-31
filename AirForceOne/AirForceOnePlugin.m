@@ -114,15 +114,20 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
     }
     if ([self didValueForInputKeyChange:@"inputImageLocation"]) {
         NSString* baseDirectory = [[[context compositionURL] URLByDeletingLastPathComponent] path];
-        NSURL* url = [[[NSURL alloc] initFileURLWithPossiblyRelativePath:self.inputImageLocation relativeTo:baseDirectory isDirectory:NO] autorelease];
-        // TODO - may be better to just let it fail later?
-        if (![url isFileURL]) {
-            CCErrorLog(@"ERROR - filed to create URL for path '%@'", self.inputImageLocation);
-        }
-        NSError* error;
-        if (![url checkResourceIsReachableAndReturnError:&error]) {
-            CCErrorLog(@"ERROR - bad image URL: %@", [error localizedDescription]);
-            return YES;
+        NSURL* url = nil;
+        if (![self.inputImageLocation hasPrefix:@"http://"]) {
+            url = [[[NSURL alloc] initFileURLWithPossiblyRelativePath:self.inputImageLocation relativeTo:baseDirectory isDirectory:NO] autorelease];
+            // TODO - may be better to just let it fail later?
+            if (![url isFileURL]) {
+                CCErrorLog(@"ERROR - filed to create URL for path '%@'", self.inputImageLocation);
+            }
+            NSError* error;
+            if (![url checkResourceIsReachableAndReturnError:&error]) {
+                CCErrorLog(@"ERROR - bad image URL: %@", [error localizedDescription]);
+                return YES;
+            }        
+        } else {
+            url = [NSURL URLWithString:self.inputImageLocation];
         }
 
         self.imageURL = url;
