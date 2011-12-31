@@ -9,6 +9,7 @@ NOW
 [ ] profile image resizing and data delivery
 [ ] use non-blocking read of image off disk via NSURLConnection
 [ ] consider using GCD for image resize / recompress
+[ ] migrate to ARC
 
 LATER
 [X] investigate JPEG compression options on resize
