@@ -25,7 +25,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @implementation AirForceOnePlugIn
 
-@dynamic inputHost, inputImageLocation;
+@dynamic inputHost, inputImageLocation, inputSendSignal;
 @synthesize appleTV = _appleTV, host = _host, imageURL = _imageURL;
 
 + (NSDictionary*)attributes {
@@ -55,6 +55,8 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         return [NSDictionary dictionaryWithObjectsAndKeys:@"Host", QCPortAttributeNameKey, nil];
     else if ([key isEqualToString:@"inputImageLocation"])
         return [NSDictionary dictionaryWithObjectsAndKeys:@"Image Location", QCPortAttributeNameKey, nil];
+    else if ([key isEqualToString:@"inputSendSignal"])
+        return [NSDictionary dictionaryWithObjectsAndKeys:@"Send Signal", QCPortAttributeNameKey, nil];
 	return nil;
 }
 
@@ -99,7 +101,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 - (BOOL)execute:(id <QCPlugInContext>)context atTime:(NSTimeInterval)time withArguments:(NSDictionary*)arguments {
     // quick bail
-    if (![self didValueForInputKeyChange:@"inputHost"] && ![self didValueForInputKeyChange:@"inputImageLocation"])
+    if (!([self didValueForInputKeyChange:@"inputHost"] || [self didValueForInputKeyChange:@"inputImageLocation"] || ([self didValueForInputKeyChange:@"inputSendSignal"] && self.inputSendSignal)))
         return YES;
 
     CCDebugLogSelector();

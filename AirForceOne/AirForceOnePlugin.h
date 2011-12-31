@@ -18,4 +18,5 @@
 }
 @property (nonatomic, assign) NSString* inputHost;
 @property (nonatomic, assign) NSString* inputImageLocation;
+@property (nonatomic) BOOL inputSendSignal;
 @end
