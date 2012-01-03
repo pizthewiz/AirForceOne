@@ -116,7 +116,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         NSString* baseDirectory = [[[context compositionURL] URLByDeletingLastPathComponent] path];
         NSURL* url = nil;
         if (![self.inputImageLocation hasPrefix:@"http://"]) {
-            url = [[[NSURL alloc] initFileURLWithPossiblyRelativePath:self.inputImageLocation relativeTo:baseDirectory isDirectory:NO] autorelease];
+            url = [[[NSURL alloc] initFileURLWithPossiblyRelativeString:self.inputImageLocation relativeTo:baseDirectory isDirectory:NO] autorelease];
             // TODO - may be better to just let it fail later?
             if (![url isFileURL]) {
                 CCErrorLog(@"ERROR - filed to create URL for path '%@'", self.inputImageLocation);
