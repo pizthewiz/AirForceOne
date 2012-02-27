@@ -3,7 +3,7 @@
 //  AirForceOne
 //
 //  Created by Jean-Pierre Mouilleseaux on 15 July 2011.
-//  Copyright 2011 Chorded Constructions. All rights reserved.
+//  Copyright 2011-2012 Chorded Constructions. All rights reserved.
 //
 
 #import "AirForceOnePlugIn.h"
@@ -113,9 +113,9 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         [appleTV release];
     }
     if ([self didValueForInputKeyChange:@"inputImageLocation"]) {
-        NSString* baseDirectory = [[[context compositionURL] URLByDeletingLastPathComponent] path];
         NSURL* url = nil;
         if (![self.inputImageLocation hasPrefix:@"http://"]) {
+            NSString* baseDirectory = [[[context compositionURL] URLByDeletingLastPathComponent] path];
             url = [[[NSURL alloc] initFileURLWithPossiblyRelativeString:self.inputImageLocation relativeTo:baseDirectory isDirectory:NO] autorelease];
             // TODO - may be better to just let it fail later?
             if (![url isFileURL]) {
