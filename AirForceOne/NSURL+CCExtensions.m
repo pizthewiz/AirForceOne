@@ -14,13 +14,13 @@
     if ([filePath hasPrefix:@"file://"]) {
         self = [self initWithString:filePath];
     } else {
-        if (![filePath hasPrefix:@"/"]) {
+        if (![filePath hasPrefix:@"/"] && ![filePath hasPrefix:@"~"]) {
             filePath = [base stringByAppendingPathComponent:[filePath stringByStandardizingPath]];
         }
         filePath = [filePath stringByStandardizingPath];
         self = [self initFileURLWithPath:filePath isDirectory:isDir];
     }
-    
+
     return self;
 }
 
