@@ -9,8 +9,9 @@ NOW
 [ ] profile image resizing and data delivery
 [ ] use non-blocking read of image off disk via NSURLConnection
 [ ] consider using GCD for image resize / recompress
-[ ] figure out why this doesn't run in ballmachine, something runloop based in LDURLLoader?
-[ ] migrate to ARC
+[\] figure out why this doesn't run in ballmachine, something runloop based in LDURLLoader?
+    runloop issues
+[X] migrate to ARC
 
 LATER
 [X] investigate JPEG compression options on resize
