@@ -3,7 +3,7 @@
 //  AirForceOne
 //
 //  Created by Jean-Pierre Mouilleseaux on 16 July 2011.
-//  Copyright 2011 Chorded Constructions. All rights reserved.
+//  Copyright 2011-2012 Chorded Constructions. All rights reserved.
 //
 
 #import "AFOAppleTV.h"
@@ -56,8 +56,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     }
     // set JPEG compression
     NSDictionary* properties = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithFloat:compressionFactor], kCGImageDestinationLossyCompressionQuality, nil];
-    CGImageDestinationAddImage(destination, image, (CFDictionaryRef)properties);
-    [properties release];
+    CGImageDestinationAddImage(destination, image, (__bridge CFDictionaryRef)properties);
     BOOL status = CGImageDestinationFinalize(destination);
     if (!status) {
         CCErrorLog(@"ERROR - failed to write scaled image to in-memory buffer");
@@ -106,11 +105,11 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
 @implementation LDURLLoader
 + (id)loaderWithURL:(NSURL*)url {
-    return [[[self alloc] initWithRequest:[NSURLRequest requestWithURL:url]] autorelease];
+    return [[self alloc] initWithRequest:[NSURLRequest requestWithURL:url]];
 }
 
 + (id)loaderWithRequest:(NSURLRequest*)request {
-    return [[[self alloc] initWithRequest:request] autorelease];
+    return [[self alloc] initWithRequest:request];
 }
 
 - (id)initWithRequest:(NSURLRequest*)request {
@@ -124,23 +123,8 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 - (id)initWithURL:(NSURL*)url {
     NSURLRequest* request = [[NSURLRequest alloc] initWithURL:url];
     self = [self initWithRequest:request];
-    [request release];
 
     return self;
-}
-
-- (void)dealloc {
-    [_connection release];
-    [_response release];
-    [_accumulatedData release];
-
-    [_timeoutHandler release];
-    [_responseHandler release];
-    [_progressHandler release];
-    [_finishedHandler release];
-    [_errorHandler release];
-
-    [super dealloc];
 }
 
 - (void)setTimeout:(NSTimeInterval)timeout handler:(void (^)(void))cb {
@@ -183,7 +167,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 }
 
 - (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response {
-    _response = [response retain];
+    _response = response;
     _responseLengthEstimate = [response expectedContentLength];
     if (_responseHandler)
         _responseHandler(response);
@@ -224,15 +208,9 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 - (id)initWithHost:(NSString*)host {
     self = [super init];
     if (self) {
-        _host = [host retain];
+        _host = host;
     }
     return self;
-}
-
-- (void)dealloc {
-    [_host release];
-
-    [super dealloc];
 }
 
 #pragma mark -
@@ -246,7 +224,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         return;
     }
 
-    CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, NULL);
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
     if (!imageSource) {
         CCErrorLog(@"ERROR - failed to crate image source");
     }
@@ -271,8 +249,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         CFDataRef compressedImage = CreateCompressedJPEGDataFromImage(scaledImage, 0.5);
         CGImageRelease(scaledImage);
 
-        [imageData release];
-        imageData = (NSData*)compressedImage;
+        imageData = (__bridge_transfer NSData*)compressedImage;
 
 #define SHOULD_WRITE_TEMP_IMAGE_TO_DISK 0
 #if SHOULD_WRITE_TEMP_IMAGE_TO_DISK
@@ -286,7 +263,6 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     CGImageRelease(image);
 
     [self _showImageWithData:imageData];
-    [imageData release];
 }
 
 // - (void)playVideoAtURL:(NSURL*)videoURL {
@@ -356,8 +332,6 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         CCErrorLog(@"ERROR - %@", [error localizedDescription]);
     }];
     [loader start];
-
-    [request release];
 }
 
 #pragma mark - PRIVATE
@@ -396,8 +370,6 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         CCErrorLog(@"ERROR - %@", [error localizedDescription]);
     }];
     [loader start];
-
-    [request release];
 }
 
 @end

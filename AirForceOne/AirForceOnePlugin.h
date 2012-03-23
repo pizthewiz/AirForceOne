@@ -3,7 +3,7 @@
 //  AirForceOne
 //
 //  Created by Jean-Pierre Mouilleseaux on 15 July 2011.
-//  Copyright 2011 Chorded Constructions. All rights reserved.
+//  Copyright 2011-2012 Chorded Constructions. All rights reserved.
 //
 
 #import <Quartz/Quartz.h>
@@ -16,7 +16,7 @@
     NSString* _host;
     NSURL* _imageURL;
 }
-@property (nonatomic, assign) NSString* inputHost;
-@property (nonatomic, assign) NSString* inputImageLocation;
+@property (nonatomic, weak) NSString* inputHost;
+@property (nonatomic, weak) NSString* inputImageLocation;
 @property (nonatomic) BOOL inputSendSignal;
 @end

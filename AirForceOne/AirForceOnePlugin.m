@@ -14,9 +14,9 @@
 static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @interface AirForceOnePlugIn()
-@property (nonatomic, retain) AFOAppleTV* appleTV;
-@property (nonatomic, retain) NSString* host;
-@property (nonatomic, retain) NSURL* imageURL;
+@property (nonatomic, strong) AFOAppleTV* appleTV;
+@property (nonatomic, strong) NSString* host;
+@property (nonatomic, strong) NSURL* imageURL;
 - (void)_sendToAppleTV;
 @end
 
@@ -69,16 +69,6 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 	return kQCPlugInTimeModeNone;
 }
 
-#pragma mark -
-
-- (void)dealloc {
-    [_appleTV release];
-    [_host release];
-    [_imageURL release];
-
-	[super dealloc];
-}
-
 #pragma mark - EXECUTION
 
 - (BOOL)startExecution:(id <QCPlugInContext>)context {
@@ -110,13 +100,12 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
     if ([self didValueForInputKeyChange:@"inputHost"] && ![self.inputHost isEqualToString:@""]) {
         AFOAppleTV* appleTV = [[AFOAppleTV alloc] initWithHost:self.inputHost];
         self.appleTV = appleTV;
-        [appleTV release];
     }
     if ([self didValueForInputKeyChange:@"inputImageLocation"]) {
         NSURL* url = nil;
         if (![self.inputImageLocation hasPrefix:@"http://"]) {
             NSString* baseDirectory = [[[context compositionURL] URLByDeletingLastPathComponent] path];
-            url = [[[NSURL alloc] initFileURLWithPossiblyRelativeString:self.inputImageLocation relativeTo:baseDirectory isDirectory:NO] autorelease];
+            url = [[NSURL alloc] initFileURLWithPossiblyRelativeString:self.inputImageLocation relativeTo:baseDirectory isDirectory:NO];
             // TODO - may be better to just let it fail later?
             if (![url isFileURL]) {
                 CCErrorLog(@"ERROR - filed to create URL for path '%@'", self.inputImageLocation);
@@ -179,7 +168,6 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 // #define AFOVideoURLDefault @"http://www.808.dk/pics/video/gizmo.mp4"
 //     NSURL* contentURL = [[NSURL alloc] initWithString:AFOVideoURLDefault];
 //     [self.appleTV playVideoAtURL:contentURL];
-//     [contentURL release];
 
     [self.appleTV showImageAtURL:_imageURL];
 }
