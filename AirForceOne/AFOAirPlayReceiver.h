@@ -1,5 +1,5 @@
 //
-//  AFOAppleTV.h
+//  AFOAirPlayReceiver.h
 //  AirForceOne
 //
 //  Created by Jean-Pierre Mouilleseaux on 16 July 2011.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AFOAppleTV : NSObject
+@interface AFOAirPlayReceiver : NSObject
 - (id)initWithHost:(NSString*)host;
 // @property (nonatomic, readonly) NSString* host;
 

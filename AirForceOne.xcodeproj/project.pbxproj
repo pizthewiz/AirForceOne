@@ -13,7 +13,7 @@
 		D8DC60FF13D0B87C00FB68EF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DC60FD13D0B87C00FB68EF /* InfoPlist.strings */; };
 		D8DC610213D0B87C00FB68EF /* AirForceOnePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */; };
 		D8DC611013D0C6F500FB68EF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8DC610E13D0C6F500FB68EF /* Localizable.strings */; };
-		D8DC612613D2810A00FB68EF /* AFOAppleTV.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DC612513D2810A00FB68EF /* AFOAppleTV.m */; };
+		D8DC612613D2810A00FB68EF /* AFOAirPlayReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DC612513D2810A00FB68EF /* AFOAirPlayReceiver.m */; };
 		D8DC612813D2A65800FB68EF /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8DC60F513D0B87C00FB68EF /* AppKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,8 +36,8 @@
 		D8DC610F13D0C6F500FB68EF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D8DC611113D0C71E00FB68EF /* AirForceOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirForceOne.h; sourceTree = "<group>"; };
 		D8DC611213D0FADA00FB68EF /* Display On Apple TV.qtz */ = {isa = PBXFileReference; lastKnownFileType = "video.quartz-composer"; path = "Display On Apple TV.qtz"; sourceTree = SOURCE_ROOT; };
-		D8DC612413D2810A00FB68EF /* AFOAppleTV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFOAppleTV.h; sourceTree = "<group>"; };
-		D8DC612513D2810A00FB68EF /* AFOAppleTV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFOAppleTV.m; sourceTree = "<group>"; };
+		D8DC612413D2810A00FB68EF /* AFOAirPlayReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFOAirPlayReceiver.h; sourceTree = "<group>"; };
+		D8DC612513D2810A00FB68EF /* AFOAirPlayReceiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFOAirPlayReceiver.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,8 +92,8 @@
 			isa = PBXGroup;
 			children = (
 				D8DC611113D0C71E00FB68EF /* AirForceOne.h */,
-				D8DC612413D2810A00FB68EF /* AFOAppleTV.h */,
-				D8DC612513D2810A00FB68EF /* AFOAppleTV.m */,
+				D8DC612413D2810A00FB68EF /* AFOAirPlayReceiver.h */,
+				D8DC612513D2810A00FB68EF /* AFOAirPlayReceiver.m */,
 				D8DC610013D0B87C00FB68EF /* AirForceOnePlugin.h */,
 				D8DC610113D0B87C00FB68EF /* AirForceOnePlugin.m */,
 				D89336BC14AF73D600F4D604 /* NSURL+CCExtensions.h */,
@@ -216,7 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8DC610213D0B87C00FB68EF /* AirForceOnePlugin.m in Sources */,
-				D8DC612613D2810A00FB68EF /* AFOAppleTV.m in Sources */,
+				D8DC612613D2810A00FB68EF /* AFOAirPlayReceiver.m in Sources */,
 				D89336BE14AF73D600F4D604 /* NSURL+CCExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -3,18 +3,18 @@
 //  AirForceOne
 //
 //  Created by Jean-Pierre Mouilleseaux on 15 July 2011.
-//  Copyright 2011-2012 Chorded Constructions. All rights reserved.
+//  Copyright 2011-2013 Chorded Constructions. All rights reserved.
 //
 
 #import "AirForceOnePlugIn.h"
 #import "AirForceOne.h"
-#import "AFOAppleTV.h"
+#import "AFOAirPlayReceiver.h"
 #import "NSURL+CCExtensions.h"
 
 static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 @interface AirForceOnePlugIn()
-@property (nonatomic, strong) AFOAppleTV* appleTV;
+@property (nonatomic, strong) AFOAirPlayReceiver* receiver;
 @property (nonatomic, strong) NSString* host;
 @property (nonatomic, strong) NSURL* imageURL;
 @end
@@ -81,8 +81,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 //    CCDebugLogSelector();
 
     if ([self didValueForInputKeyChange:@"inputHost"] && ![self.inputHost isEqualToString:@""]) {
-        AFOAppleTV* appleTV = [[AFOAppleTV alloc] initWithHost:self.inputHost];
-        self.appleTV = appleTV;
+        self.receiver = [[AFOAirPlayReceiver alloc] initWithHost:self.inputHost];
     }
     if ([self didValueForInputKeyChange:@"inputImageLocation"]) {
         NSURL* url = nil;
@@ -107,13 +106,13 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         // TODO - some sort of file validation?
     }
 
-    if (!self.appleTV || !self.imageURL) {
+    if (!self.receiver || !self.imageURL) {
         return YES;
     }
 
     CCDebugLog(@"will display image at location: %@", self.imageURL);
 
-    [self _sendToAppleTV];
+    [self _sendToReceiver];
 
     return YES;
 }
@@ -126,7 +125,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
     CCDebugLogSelector();
 
 
-    [self.appleTV stop];
+    [self.receiver stop];
 }
 
 - (void)stopExecution:(id <QCPlugInContext>)context {
@@ -136,15 +135,15 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
     CCDebugLogSelector();
 
-    // TODO - [self.appleTV stop] ?
+    // TODO - [self.receiver stop] ?
 }
 
 #pragma mark - PRIVATE
 
-- (void)_sendToAppleTV {
+- (void)_sendToReceiver {
     CCDebugLogSelector();
 
-    if (!self.appleTV) {
+    if (!self.receiver) {
         CCWarningLog(@"WARNING - Apple TV not configured, cannot display image");
         return;
     }
@@ -153,7 +152,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 //     NSURL* contentURL = [[NSURL alloc] initWithString:AFOVideoURLDefault];
 //     [self.appleTV playVideoAtURL:contentURL];
 
-    [self.appleTV showImageAtURL:self.imageURL];
+    [self.receiver showImageAtURL:self.imageURL];
 }
 
 @end

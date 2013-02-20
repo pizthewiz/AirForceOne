@@ -1,12 +1,12 @@
 //
-//  AFOAppleTV.m
+//  AFOAirPlayReceiver.m
 //  AirForceOne
 //
 //  Created by Jean-Pierre Mouilleseaux on 16 July 2011.
 //  Copyright 2011-2013 Chorded Constructions. All rights reserved.
 //
 
-#import "AFOAppleTV.h"
+#import "AFOAirPlayReceiver.h"
 #import "AirForceOne.h"
 
 CGImageRef CreateScaledImageAtFactor(CGImageRef sourceImage, CGFloat scaleFactor);
@@ -194,19 +194,18 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 }
 @end
 
-#pragma mark - AFOAPPLETV
+#pragma mark - AFOAIRPLAYRECIEVER
 
-@interface AFOAppleTV()
-@property (nonatomic, retain, readwrite) NSString* host;
-- (void)_showImageWithData:(NSData*)imageData;
+@interface AFOAirPlayReceiver()
+@property (nonatomic, strong, readwrite) NSString* host;
 @end
 
-@implementation AFOAppleTV
+@implementation AFOAirPlayReceiver
 
 - (id)initWithHost:(NSString*)host {
     self = [super init];
     if (self) {
-        _host = host;
+        self.host = host;
     }
     return self;
 }
@@ -233,13 +232,13 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     if (imageSource)
         CFRelease(imageSource);
 
-#define AFODisplayWidth 1280.
-#define AFODisplayHeight 720.
-    if (CGImageGetWidth(image) >= AFODisplayWidth*1.5 || CGImageGetHeight(image) >= AFODisplayHeight*1.5) {
+#define AFOAirPlayReceiverDisplayWidth 1280.
+#define AFOAirPlayReceiverDisplayHeight 720.
+    if (CGImageGetWidth(image) >= AFOAirPlayReceiverDisplayWidth*1.5 || CGImageGetHeight(image) >= AFOAirPlayReceiverDisplayHeight*1.5) {
 //        CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
 
         // resize
-        CGFloat scaleFactor = MAX(AFODisplayWidth/CGImageGetWidth(image), AFODisplayHeight/CGImageGetHeight(image));
+        CGFloat scaleFactor = MAX(AFOAirPlayReceiverDisplayWidth/CGImageGetWidth(image), AFOAirPlayReceiverDisplayHeight/CGImageGetHeight(image));
         CGImageRef scaledImage = CreateScaledImageAtFactor(image, scaleFactor);
 //        CCDebugLog(@"resized image %lux%lu", CGImageGetWidth(scaledImage), CGImageGetHeight(scaledImage));
 
