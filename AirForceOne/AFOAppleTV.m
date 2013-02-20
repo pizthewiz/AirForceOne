@@ -236,12 +236,12 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 #define AFODisplayWidth 1280.
 #define AFODisplayHeight 720.
     if (CGImageGetWidth(image) >= AFODisplayWidth*1.5 || CGImageGetHeight(image) >= AFODisplayHeight*1.5) {
-        CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
+//        CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
 
         // resize
         CGFloat scaleFactor = MAX(AFODisplayWidth/CGImageGetWidth(image), AFODisplayHeight/CGImageGetHeight(image));
         CGImageRef scaledImage = CreateScaledImageAtFactor(image, scaleFactor);
-        CCDebugLog(@"resized image %lux%lu", CGImageGetWidth(scaledImage), CGImageGetHeight(scaledImage));
+//        CCDebugLog(@"resized image %lux%lu", CGImageGetWidth(scaledImage), CGImageGetHeight(scaledImage));
 
         // grab JPEG compressed data from image
         CFDataRef compressedImage = CreateCompressedJPEGDataFromImage(scaledImage, 0.5);
@@ -317,14 +317,14 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         if ([httpResponse statusCode] != 200) {
             // TODO - do something
         }
-        CCDebugLog(@"response status: %lu", (long unsigned)[httpResponse statusCode]);
+//        CCDebugLog(@"response status: %lu", (long unsigned)[httpResponse statusCode]);
     }];
     [loader setProgressHandler:^(long long totalBytesWritten, long long totalBytesExpectedToWrite) {
         float fractionComplete = MIN(((float)totalBytesWritten/(float)totalBytesExpectedToWrite), 1.);
         CCDebugLog(@"%.2f%% (%.2fKB of %.2fKB)", fractionComplete * 100., totalBytesWritten/1024., totalBytesExpectedToWrite/1024.);
     }];
     [loader setFinishedHandler:^(NSData *data, NSURLResponse *response) {
-        CCDebugLog(@"finished");
+//        CCDebugLog(@"finished");
     }];
     [loader setErrorHandler:^(NSError* error){
         CCErrorLog(@"ERROR - %@", [error localizedDescription]);
@@ -355,14 +355,14 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
         if ([httpResponse statusCode] != 200) {
             // TODO - do something
         }
-        CCDebugLog(@"response status: %lu", (long unsigned)[httpResponse statusCode]);
+//        CCDebugLog(@"response status: %lu", (long unsigned)[httpResponse statusCode]);
     }];
     [loader setProgressHandler:^(long long totalBytesWritten, long long totalBytesExpectedToWrite) {
         float fractionComplete = MIN(((float)totalBytesWritten/(float)totalBytesExpectedToWrite), 1.);
         CCDebugLog(@"%.2f%% (%.2fKB of %.2fKB)", fractionComplete * 100., totalBytesWritten/1024., totalBytesExpectedToWrite/1024.);
     }];
     [loader setFinishedHandler:^(NSData *data, NSURLResponse *response) {
-        CCDebugLog(@"finished");
+//        CCDebugLog(@"finished");
     }];
     [loader setErrorHandler:^(NSError* error){
         CCErrorLog(@"ERROR - %@", [error localizedDescription]);

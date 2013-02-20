@@ -78,7 +78,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         return YES;
     }
 
-    CCDebugLogSelector();
+//    CCDebugLogSelector();
 
     if ([self didValueForInputKeyChange:@"inputHost"] && ![self.inputHost isEqualToString:@""]) {
         AFOAppleTV* appleTV = [[AFOAppleTV alloc] initWithHost:self.inputHost];
