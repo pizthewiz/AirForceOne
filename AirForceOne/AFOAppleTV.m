@@ -3,7 +3,7 @@
 //  AirForceOne
 //
 //  Created by Jean-Pierre Mouilleseaux on 16 July 2011.
-//  Copyright 2011-2012 Chorded Constructions. All rights reserved.
+//  Copyright 2011-2013 Chorded Constructions. All rights reserved.
 //
 
 #import "AFOAppleTV.h"
@@ -203,8 +203,6 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
 @implementation AFOAppleTV
 
-@synthesize host = _host;
-
 - (id)initWithHost:(NSString*)host {
     self = [super init];
     if (self) {
@@ -345,7 +343,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 #define AFOPhotoTransitionDissolve @"Dissolve" // apparently the default
 //    [request setValue:AFOPhotoTransitionSlideLeft forHTTPHeaderField:@"X-Apple-Transition"];
 
-    [request setValue:[NSString stringWithFormat:@"%d", [imageData length]] forHTTPHeaderField:@"Content-length"];
+    [request setValue:[NSString stringWithFormat:@"%ld", (unsigned long)[imageData length]] forHTTPHeaderField:@"Content-length"];
     [request setHTTPBody:imageData];
 
     LDURLLoader* loader = [LDURLLoader loaderWithRequest:request];

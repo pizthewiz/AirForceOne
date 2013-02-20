@@ -17,47 +17,29 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 @property (nonatomic, strong) AFOAppleTV* appleTV;
 @property (nonatomic, strong) NSString* host;
 @property (nonatomic, strong) NSURL* imageURL;
-- (void)_sendToAppleTV;
 @end
-
-// WORKAROUND - radar://problem/9927446 Lion added QCPlugInAttribute key constants not weak linked
-#pragma weak QCPlugInAttributeCategoriesKey
-#pragma weak QCPlugInAttributeExamplesKey
 
 @implementation AirForceOnePlugIn
 
 @dynamic inputHost, inputImageLocation, inputSendSignal;
-@synthesize appleTV = _appleTV, host = _host, imageURL = _imageURL;
 
 + (NSDictionary*)attributes {
-    NSMutableDictionary* attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys: 
-       CCLocalizedString(@"kQCPlugIn_Name", NULL), QCPlugInAttributeNameKey, 
-       CCLocalizedString(@"kQCPlugIn_Description", NULL), QCPlugInAttributeDescriptionKey, 
-       nil];
-
-#if defined(MAC_OS_X_VERSION_10_7) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
-    if (&QCPlugInAttributeCategoriesKey != NULL) {
-        // array with category strings
-        NSArray* categories = [NSArray arrayWithObjects:@"Render", @"Destination", nil];
-        [attributes setObject:categories forKey:QCPlugInAttributeCategoriesKey];
-    }
-    if (&QCPlugInAttributeExamplesKey != NULL) {
-        // array of file paths or urls relative to plugin resources
-        NSArray* examples = [NSArray arrayWithObjects:[[NSBundle bundleForClass:[self class]] URLForResource:AFOExampleCompositionName withExtension:@"qtz"], nil];
-        [attributes setObject:examples forKey:QCPlugInAttributeExamplesKey];
-    }
-#endif
-
-    return (NSDictionary*)attributes;
+    return @{
+        QCPlugInAttributeNameKey: CCLocalizedString(@"kQCPlugIn_Name", NULL),
+        QCPlugInAttributeDescriptionKey: CCLocalizedString(@"kQCPlugIn_Description", NULL),
+        QCPlugInAttributeCategoriesKey: @[@"Render", @"Destination"],
+        QCPlugInAttributeExamplesKey: @[[[NSBundle bundleForClass:[self class]] URLForResource:AFOExampleCompositionName withExtension:@"qtz"]]
+    };
 }
 
 + (NSDictionary*)attributesForPropertyPortWithKey:(NSString*)key {
-    if ([key isEqualToString:@"inputHost"])
-        return [NSDictionary dictionaryWithObjectsAndKeys:@"Host", QCPortAttributeNameKey, nil];
-    else if ([key isEqualToString:@"inputImageLocation"])
-        return [NSDictionary dictionaryWithObjectsAndKeys:@"Image Location", QCPortAttributeNameKey, nil];
-    else if ([key isEqualToString:@"inputSendSignal"])
-        return [NSDictionary dictionaryWithObjectsAndKeys:@"Send Signal", QCPortAttributeNameKey, nil];
+    if ([key isEqualToString:@"inputHost"]) {
+        return @{QCPortAttributeNameKey: @"Host"};
+    } else if ([key isEqualToString:@"inputImageLocation"]) {
+        return @{QCPortAttributeNameKey: @"Image Location"};
+    } else if ([key isEqualToString:@"inputSendSignal"]) {
+        return @{QCPortAttributeNameKey: @"Send Signal"};
+    }
 	return nil;
 }
 
@@ -92,8 +74,9 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 - (BOOL)execute:(id <QCPlugInContext>)context atTime:(NSTimeInterval)time withArguments:(NSDictionary*)arguments {
     // quick bail
-    if (!([self didValueForInputKeyChange:@"inputHost"] || [self didValueForInputKeyChange:@"inputImageLocation"] || ([self didValueForInputKeyChange:@"inputSendSignal"] && self.inputSendSignal)))
+    if (!([self didValueForInputKeyChange:@"inputHost"] || [self didValueForInputKeyChange:@"inputImageLocation"] || ([self didValueForInputKeyChange:@"inputSendSignal"] && self.inputSendSignal))) {
         return YES;
+    }
 
     CCDebugLogSelector();
 
@@ -124,8 +107,9 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         // TODO - some sort of file validation?
     }
 
-    if (!self.appleTV || !self.imageURL)
+    if (!self.appleTV || !self.imageURL) {
         return YES;
+    }
 
     CCDebugLog(@"will display image at location: %@", self.imageURL);
 
@@ -169,7 +153,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 //     NSURL* contentURL = [[NSURL alloc] initWithString:AFOVideoURLDefault];
 //     [self.appleTV playVideoAtURL:contentURL];
 
-    [self.appleTV showImageAtURL:_imageURL];
+    [self.appleTV showImageAtURL:self.imageURL];
 }
 
 @end
