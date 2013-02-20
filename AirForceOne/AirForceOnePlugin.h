@@ -11,5 +11,7 @@
 @interface AirForceOnePlugIn : QCPlugIn
 @property (nonatomic, weak) NSString* inputHost;
 @property (nonatomic, weak) NSString* inputImageLocation;
+@property (nonatomic) NSUInteger inputMaximumWidth;
+@property (nonatomic) NSUInteger inputMaximumHeight;
 @property (nonatomic) BOOL inputSendSignal;
 @end

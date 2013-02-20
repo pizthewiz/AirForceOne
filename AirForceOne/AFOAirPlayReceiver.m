@@ -212,7 +212,7 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
 
 #pragma mark -
 
-- (void)showImageAtURL:(NSURL*)imageURL {
+- (void)showImageAtURL:(NSURL*)imageURL maximumSize:(CGSize)maximumSize {
     NSError* error;
     // TODO - could use non-blocking read via NSURLConnection instead
     NSData* imageData = [[NSData alloc] initWithContentsOfURL:imageURL options:0 error:&error];
@@ -229,16 +229,15 @@ CFDataRef CreateCompressedJPEGDataFromImage(CGImageRef image, CGFloat compressio
     if (!image) {
         CCErrorLog(@"ERROR - failed to crate image from source");
     }
-    if (imageSource)
+    if (imageSource) {
         CFRelease(imageSource);
+    }
 
-#define AFOAirPlayReceiverDisplayWidth 1280.
-#define AFOAirPlayReceiverDisplayHeight 720.
-    if (CGImageGetWidth(image) >= AFOAirPlayReceiverDisplayWidth*1.5 || CGImageGetHeight(image) >= AFOAirPlayReceiverDisplayHeight*1.5) {
+    if (CGImageGetWidth(image) >= maximumSize.width*1.5 || CGImageGetHeight(image) >= maximumSize.height*1.5) {
 //        CCDebugLog(@"should reisze image from %lux%lu", CGImageGetWidth(image), CGImageGetHeight(image));
 
         // resize
-        CGFloat scaleFactor = MAX(AFOAirPlayReceiverDisplayWidth/CGImageGetWidth(image), AFOAirPlayReceiverDisplayHeight/CGImageGetHeight(image));
+        CGFloat scaleFactor = MAX(maximumSize.width/CGImageGetWidth(image), maximumSize.height/CGImageGetHeight(image));
         CGImageRef scaledImage = CreateScaledImageAtFactor(image, scaleFactor);
 //        CCDebugLog(@"resized image %lux%lu", CGImageGetWidth(scaledImage), CGImageGetHeight(scaledImage));
 

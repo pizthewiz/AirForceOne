@@ -7,4 +7,4 @@
 */
 
 "kQCPlugIn_Name" = "Apple TV";
-"kQCPlugIn_Description" = "This patch allows an image to be displayed on a 2nd generation Apple TV.\n\nThe Image Location input must be a fully qualified URL with scheme, or a file path relative to the composition. Images larger than either dimension of 1920x1080, are internally resized and JPEG compressed before being sent to the Apple TV.";
+"kQCPlugIn_Description" = "This patch allows an image to be displayed on a 2nd generation Apple TV.\n\nThe Image Location input must be a fully qualified URL with scheme, or a file path relative to the composition. Images larger than either dimension by 150% then given maximum, are internally resized and JPEG compressed before being sent to the AirPlay receiver.";

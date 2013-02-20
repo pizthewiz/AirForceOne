@@ -1,4 +1,7 @@
 
+### v0.3.0 (19 Feb 2013)
+* ADD maximum width and heigth inputs
+
 ### v0.2.5 (23 Mar 2012)
 * CHANGE target 10.7 only and use ARC
 

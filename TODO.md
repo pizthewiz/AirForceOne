@@ -2,7 +2,6 @@
 - [ ] profile image resizing and data delivery
 - [ ] use non-blocking read of image off disk via NSURLConnection
 - [ ] consider using GCD for image resize / recompress
-- [ ] expose setting of image resize/recompress -- the easy way to support 3rd generation Apple TV
 
 ### LATER
 - [ ] support password-protected Apple TV

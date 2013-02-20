@@ -12,7 +12,7 @@
 - (id)initWithHost:(NSString*)host;
 // @property (nonatomic, readonly) NSString* host;
 
-- (void)showImageAtURL:(NSURL*)imageURL;
+- (void)showImageAtURL:(NSURL*)imageURL maximumSize:(CGSize)size;
 // - (void)playVideoAtURL:(NSURL*)videoURL;
 // - (void)play;
 // - (void)pause;

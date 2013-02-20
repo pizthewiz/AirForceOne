@@ -17,11 +17,12 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 @property (nonatomic, strong) AFOAirPlayReceiver* receiver;
 @property (nonatomic, strong) NSString* host;
 @property (nonatomic, strong) NSURL* imageURL;
+@property (nonatomic) CGSize maximumSize;
 @end
 
 @implementation AirForceOnePlugIn
 
-@dynamic inputHost, inputImageLocation, inputSendSignal;
+@dynamic inputHost, inputImageLocation, inputMaximumWidth, inputMaximumHeight, inputSendSignal;
 
 + (NSDictionary*)attributes {
     return @{
@@ -37,6 +38,20 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         return @{QCPortAttributeNameKey: @"Host"};
     } else if ([key isEqualToString:@"inputImageLocation"]) {
         return @{QCPortAttributeNameKey: @"Image Location"};
+    } else if ([key isEqualToString:@"inputMaximumWidth"]) {
+        return @{
+            QCPortAttributeNameKey: @"Maximum Width Pixels",
+            QCPortAttributeMinimumValueKey: @1,
+            QCPortAttributeMaximumValueKey: @10000,
+            QCPortAttributeDefaultValueKey: @1280
+        };
+    } else if ([key isEqualToString:@"inputMaximumHeight"]) {
+        return @{
+            QCPortAttributeNameKey: @"Maximum Height Pixels",
+            QCPortAttributeMinimumValueKey: @1,
+            QCPortAttributeMaximumValueKey: @10000,
+            QCPortAttributeDefaultValueKey: @720
+        };
     } else if ([key isEqualToString:@"inputSendSignal"]) {
         return @{QCPortAttributeNameKey: @"Send Signal"};
     }
@@ -74,7 +89,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 
 - (BOOL)execute:(id <QCPlugInContext>)context atTime:(NSTimeInterval)time withArguments:(NSDictionary*)arguments {
     // quick bail
-    if (!([self didValueForInputKeyChange:@"inputHost"] || [self didValueForInputKeyChange:@"inputImageLocation"] || ([self didValueForInputKeyChange:@"inputSendSignal"] && self.inputSendSignal))) {
+    if (!([self didValueForInputKeyChange:@"inputHost"] || [self didValueForInputKeyChange:@"inputImageLocation"] || [self didValueForInputKeyChange:@"inputMaximumWidth"] || [self didValueForInputKeyChange:@"inputMaximumHeight"] || ([self didValueForInputKeyChange:@"inputSendSignal"] && self.inputSendSignal))) {
         return YES;
     }
 
@@ -96,7 +111,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
             if (![url checkResourceIsReachableAndReturnError:&error]) {
                 CCErrorLog(@"ERROR - bad image URL: %@", [error localizedDescription]);
                 return YES;
-            }        
+            }
         } else {
             url = [NSURL URLWithString:self.inputImageLocation];
         }
@@ -104,6 +119,13 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
         self.imageURL = url;
 
         // TODO - some sort of file validation?
+    }
+
+    if ([self didValueForInputKeyChange:@"inputMaximumWidth"]) {
+        self.maximumSize = CGSizeMake(self.inputMaximumWidth, self.maximumSize.height);
+    }
+    if ([self didValueForInputKeyChange:@"inputMaximumHeight"]) {
+        self.maximumSize = CGSizeMake(self.maximumSize.width, self.inputMaximumHeight);
     }
 
     if (!self.receiver || !self.imageURL) {
@@ -152,7 +174,7 @@ static NSString* const AFOExampleCompositionName = @"Display On Apple TV";
 //     NSURL* contentURL = [[NSURL alloc] initWithString:AFOVideoURLDefault];
 //     [self.appleTV playVideoAtURL:contentURL];
 
-    [self.receiver showImageAtURL:self.imageURL];
+    [self.receiver showImageAtURL:self.imageURL maximumSize:self.maximumSize];
 }
 
 @end
